@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     password_reset_expires: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'user',
   });
   return User;
 };
