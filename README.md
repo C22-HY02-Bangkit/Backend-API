@@ -20,24 +20,24 @@ If docker already installed on your machine, you can run command **docker-compos
 
 ### create model and migrations
 
-`npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string`
+```npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string```
 
 ### run migrations
 
-`npx sequelize-cli db:migrate`
+```npx sequelize-cli db:migrate```
 
 ### undo migrations
 
-`npx sequelize-cli db:migrate:undo`
+```npx sequelize-cli db:migrate:undo```
 
 ### create seeds
 
-`npx sequelize-cli seed:generate --name demo-user`
+```npx sequelize-cli seed:generate --name demo-user```
 
 ### run seeds
 
-`npx sequelize-cli db:seed:all`
+```npx sequelize-cli db:seed:all```
 
 ### undo seeds
 
-`npx sequelize-cli db:seed:undo`
+```npx sequelize-cli db:seed:undo```
