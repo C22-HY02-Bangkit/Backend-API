@@ -22,8 +22,8 @@ app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 app.use(xss());
 
 // connect database
-const db = new Sequelize('hydroponic_monitoring', 'user', 'bangkit_123', {
-    host: 'localhost',
+const db = new Sequelize(process.env.DBNAME, process.env.DBUSER, process.env.DBPASSWORD, {
+    host: process.env.DBHOST,
     dialect: 'postgres',
 });
 
