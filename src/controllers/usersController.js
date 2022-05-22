@@ -1,7 +1,9 @@
 const user = require('../models').user;
+const jwt = require('jsonwebtoken');
+const validator = require('validator');
 
 // note: cuman untuk contoh - akan dihapus dikemudian hari
-exports.me = async (req, res) => {
+exports.me = (req, res) => {
     const users = await user.findAll();
 
     if (!users) throw new Error('users not found!');
@@ -13,17 +15,37 @@ exports.me = async (req, res) => {
     });
 };
 
-exports.register = async (req, res) => {
-    const { fullname, email, password, password2 } = req.body;
+exports.register = (req, res, next) => {
+    // const { fullname, email, password, password_repeat } = req.body;
 
-    res.json({
-        code: 200,
-        status: 'success',
-        message: 'User created',
-    });
+    if (!validator.isEmail(req.body.email)) {
+        return res.status(400).send({
+          message: "Please enter a valid email",
+        });
+      }
+  
+      // the password must be minimum 6 chars
+      if (!req.body.password || req.body.password.length < 6) {
+        return res.status(400).send({
+          message: "Enter a password with minimum 6 chars!",
+        });
+      }
+  
+      // If the password_repeat does not match the password
+      if (
+        !req.body.password_repeat ||
+        req.body.password != req.body.password_repeat
+      ) {
+        return res.status(400).send({
+          msg: "Both passwords have to match!",
+        });
+      }
+  
+      next();
+    
 };
 
-exports.login = async (req, res) => {
+exports.login = (req, res, next) => {
     const { email, password } = req.body;
 
     res.json({
@@ -32,3 +54,5 @@ exports.login = async (req, res) => {
         message: 'Login success',
     });
 };
+
+// exports.va;

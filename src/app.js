@@ -22,10 +22,15 @@ app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 app.use(xss());
 
 // connect database
-const db = new Sequelize(process.env.DBNAME, process.env.DBUSER, process.env.DBPASSWORD, {
-    host: process.env.DBHOST,
-    dialect: 'postgres',
-});
+const db = new Sequelize(
+    process.env.DBNAME,
+    process.env.DBUSER,
+    process.env.DBPASSWORD,
+    {
+        host: process.env.DBHOST,
+        dialect: 'postgres',
+    }
+);
 
 db.authenticate()
     .then(() => {
@@ -39,7 +44,8 @@ db.authenticate()
     });
 
 // routes
-app.use('/api', require('./routes'));
+const router = require('./routes/users.js');
+app.use('/api', router);
 
 // 404 endpoint
 app.all('*', (req, res) => {
