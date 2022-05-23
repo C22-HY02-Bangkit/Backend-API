@@ -21,23 +21,6 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false, limit: '10kb' }));
 app.use(xss());
 
-// connect database
-const db = new Sequelize(process.env.DBNAME, process.env.DBUSER, process.env.DBPASSWORD, {
-    host: process.env.DBHOST,
-    dialect: 'postgres',
-});
-
-db.authenticate()
-    .then(() => {
-        console.log('database connected');
-        app.listen(port, () =>
-            console.log(`Server run on http://${host}:${port}/`)
-        );
-    })
-    .catch((error) => {
-        console.log('Database Error: ', error);
-    });
-
 // routes
 app.use('/api', require('./routes'));
 
@@ -48,3 +31,5 @@ app.all('*', (req, res) => {
 
 // error handler
 app.use(ErrorHandler);
+
+app.listen(port, () => console.log(`Server run on http://${host}:${port}/`));
