@@ -30,26 +30,8 @@ npx sequelize-cli model:generate --name User --attributes firstName:string,lastN
 npx sequelize-cli db:migrate
 ```
 
-### undo migrations
-
-```
-npx sequelize-cli db:migrate:undo
-```
-
-### create seeds
-
-```
-npx sequelize-cli seed:generate --name demo-user
-```
-
 ### run seeds
 
 ```
 npx sequelize-cli db:seed:all
-```
-
-### undo seeds
-
-```
-npx sequelize-cli db:seed:undo
 ```
