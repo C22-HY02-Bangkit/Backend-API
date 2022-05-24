@@ -5,9 +5,10 @@ const { login, register, me } = require('../controllers/usersController');
 const User = require('../models').user;
 
 const registerValidate = [
-    check('fullname').notEmpty(),
+    check('fullname').notEmpty().withMessage('fullname is required'),
     check('email')
         .notEmpty()
+        .withMessage('email is required')
         .isEmail()
         .custom((value) => {
             return User.findOne({ where: { email: value } }).then((data) => {
@@ -17,11 +18,16 @@ const registerValidate = [
                 }
             });
         }),
-    check('password').notEmpty(),
+    check('password').notEmpty().withMessage('password is required'),
+];
+
+const loginValidate = [
+    check('email').notEmpty().withMessage('email is required').isEmail(),
+    check('password').notEmpty().withMessage('password is required'),
 ];
 
 router.get('/me', me);
-router.post('/login', login);
+router.post('/login', loginValidate, login);
 router.post('/register', registerValidate, register);
 
 module.exports = router;
