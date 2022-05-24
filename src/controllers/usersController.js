@@ -23,8 +23,6 @@ exports.register = async (req, res) => {
     // check body payload
     checkBodyPayload(bodyData, ['fullname', 'email', 'password']);
 
-    console.log('after5!@');
-
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

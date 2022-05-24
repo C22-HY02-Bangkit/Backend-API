@@ -12,7 +12,6 @@ const registerValidate = [
         .isEmail()
         .custom((value) => {
             return User.findOne({ where: { email: value } }).then((data) => {
-                console.log('data', value, data);
                 if (data) {
                     return Promise.reject('email already exists!');
                 }
