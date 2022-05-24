@@ -1,10 +1,11 @@
 const { genSaltSync, hashSync, compareSync } = require('bcryptjs');
 const User = require('../models').user;
-const { validationResult, body } = require('express-validator');
+const { validationResult } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const { v4: uuidv4 } = require('uuid');
 const { generateToken } = require('../utils/tokenManager');
-const bcrypt = require('bcryptjs');
+const { checkBodyPayload } = require('../utils/validator');
+const AppError = require('../utils/AppError');
 
 // note: cuman untuk contoh - akan dihapus dikemudian hari
 exports.me = async (req, res) => {
@@ -19,19 +20,10 @@ exports.me = async (req, res) => {
 exports.register = async (req, res) => {
     const bodyData = req.body;
 
-    // check body
-    for (const key in bodyData) {
-        const payload = ['fullname', 'email', 'password'];
+    // check body payload
+    checkBodyPayload(bodyData, ['fullname', 'email', 'password']);
 
-        // check updateable data
-        if (!payload.includes(key)) {
-            res.status(400).json({
-                code: 400,
-                message: 'Please check your input!',
-                error: `${key} is not valid!`,
-            });
-        }
-    }
+    console.log('after5!@');
 
     // validate body
     const errors = validationResult(req);
@@ -39,13 +31,15 @@ exports.register = async (req, res) => {
         res.status(403).json({
             code: 403,
             message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array()),
+            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
         });
+        return;
     }
 
     // hash password
     const password = hashSync(bodyData.password, genSaltSync(10));
 
+    // create new user
     const newUser = await User.create({
         id: uuidv4(),
         fullname: bodyData.fullname,
@@ -67,19 +61,8 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const bodyData = req.body;
 
-    // check body
-    for (const key in bodyData) {
-        const payload = ['email', 'password'];
-
-        // check updateable data
-        if (!payload.includes(key)) {
-            res.status(400).json({
-                code: 400,
-                message: 'Invalid! Please check your input!',
-                error: `${key} is not valid!`,
-            });
-        }
-    }
+    // check body payload
+    checkBodyPayload(bodyData, ['email', 'password']);
 
     // validate body
     const errors = validationResult(req);
@@ -87,15 +70,19 @@ exports.login = async (req, res) => {
         res.status(403).json({
             code: 403,
             message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array()),
+            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
         });
+        return;
     }
 
-    // hash password
+    // find user by email
     const user = await User.findOne({ where: { email: bodyData.email } });
 
-    const passwordMatch = compareSync(bodyData.password, user.password);
+    // if user not exists
+    if (!user) throw new AppError('Email not found!', 404);
 
+    // compare password
+    const passwordMatch = compareSync(bodyData.password, user.password);
     if (!passwordMatch) {
         res.status(401).json({
             code: 401,
