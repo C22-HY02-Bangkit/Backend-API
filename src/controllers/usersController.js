@@ -10,6 +10,7 @@ const { checkBodyPayload } = require('../utils/validator');
 const crypto = require('crypto');
 const AppError = require('../utils/AppError');
 const Email = require('../utils/email/Email');
+const { Op } = require('sequelize');
 
 // note: cuman untuk contoh - akan dihapus dikemudian hari
 exports.me = async (req, res) => {
@@ -17,7 +18,7 @@ exports.me = async (req, res) => {
      * contoh untuk ambil data dengan relasinya
      */
     const users = await User.findAll({
-        include: ['devices'],
+        where: { email: 'alfi@mail.com' },
     });
     const devices = await Device.findAll({
         include: ['user', 'sensor_datas'],
@@ -64,7 +65,7 @@ exports.register = async (req, res) => {
         password: password,
         verify_user: false,
         email_verify_token: hashSync(token, genSaltSync(10)),
-        email_verify_expires: Date.now() + 10 * 60 * 100,
+        email_verify_expires: Date.now() + 60 * 60 * 24 * 1000,
     });
 
     if (!newUser) throw new AppError('Register failed!', 400);
@@ -146,15 +147,14 @@ exports.resendEmail = async (req, res) => {
 
     if (!user) throw new AppError('Email not found!', 404);
 
-    if (user.verify_user) throw new AppError('Email is verified!', 400);
+    if (user.verify_user) throw new AppError('Email is already verified!', 400);
 
     // generate random string
     const token = crypto.randomBytes(32).toString('hex');
 
     // update user data
     user.email_verify_token = hashSync(token, genSaltSync(10));
-    user.email_verify_expires = Date.now() + 10 * 60 * 100;
-
+    user.email_verify_expires = Date.now() + 60 * 60 * 24 * 1000;
     // save user
     await user.save();
 
@@ -172,6 +172,52 @@ exports.resendEmail = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Email sent',
+    });
+};
+
+exports.verifyEmail = async (req, res) => {
+    const { token } = req.params;
+    const bodyData = req.body;
+
+    // check body payload
+    checkBodyPayload(bodyData, ['user_id']);
+
+    // validate body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(403).json({
+            code: 403,
+            message: 'Invalid input!',
+            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
+        });
+        return;
+    }
+
+    // find user and check if verifyToken has not expires
+    const user = await User.findOne({
+        where: {
+            id: bodyData.user_id,
+            email_verify_expires: { [Op.gt]: Date.now() },
+        },
+    });
+
+    if (!user) throw new AppError('Invalid credentials!', 401);
+
+    // validate token
+    const validateToken = compareSync(token, user.email_verify_token);
+    if (!validateToken) throw new AppError('Invalid credentials!', 401);
+
+    // update user
+    await user.update({
+        verify_user: true,
+        email_verify_token: null,
+        email_verify_expires: null,
+    });
+
+    res.json({
+        code: 200,
+        status: 'success',
+        message: 'Verification email successfully!',
     });
 };
 
@@ -202,7 +248,7 @@ exports.forgotPassword = async (req, res) => {
 
     //set token expiring
     user.email_verify_token = hashSync(convertToken, genSaltSync(10));
-    user.email_verify_expires = Date.now() + 10 * 60 * 1000;
+    user.email_verify_expires = Date.now() + 60 * 60 * 24 * 1000;
 
     // save generated token
     const save_token = await user.save();
