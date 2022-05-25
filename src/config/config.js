@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 
 module.exports = {
     development: {
@@ -21,5 +21,11 @@ module.exports = {
         database: process.env.DBNAME,
         host: process.env.DBHOST,
         dialect: 'postgresql',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false,
+            },
+        },
     },
 };
