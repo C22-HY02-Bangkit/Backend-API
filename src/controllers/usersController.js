@@ -3,7 +3,7 @@ const User = require('../models').user;
 const { validationResult } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const { v4: uuidv4 } = require('uuid');
-const { generateToken } = require('../utils/tokenManager');
+const { generateToken, verifyToken } = require('../utils/tokenManager');
 const { checkBodyPayload } = require('../utils/validator');
 const AppError = require('../utils/AppError');
 
@@ -93,5 +93,63 @@ exports.login = async (req, res) => {
         status: 'success',
         message: 'Login success!',
         token: generateToken(user.id),
+    });
+};
+
+exports.forgotPassword = async (req, res) => {
+    const bodyData = req.body;
+
+    checkBodyPayload(bodyData, ['email']);
+
+    // validate body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(403).json({
+            code: 403,
+            message: 'Invalid input!',
+            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
+        });
+        return;
+    }
+
+    //check if the email is already in the database
+    const user = await User.findOne({ where: { email: bodyData.email } });
+
+    //if the user email does not exist
+    if (!user) throw new AppError('Email not found!', 404);
+
+    //check error
+    if (!generateToken) {
+        res.status(500).json({
+            code: 500,
+            message: 'An error occured. Please try again later.',
+        });
+    }
+
+    //convert token to hexastring
+    const convertToken = generateToken(user.id).toString('hex');
+
+    //set token expiring
+    user.email_verify_token = convertToken;
+    user.email_verify_expires = Date.now() + 180000;
+
+    // save generated token
+    const save_token = await user.save();
+
+    if (!save_token) {
+        res.status(500).json({
+            code: 500,
+            message: 'An error occured while try to save token',
+        });
+    }
+
+    res.json({
+        code: 200,
+        status: 'success',
+        message: 'Token sent successfully!',
+        data: {
+            email_verify_token: save_token.email_verify_token,
+            email_verify_expires: save_token.email_verify_expires,
+        },
     });
 };
