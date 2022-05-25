@@ -10,7 +10,10 @@ module.exports = {
                 defaultValue: Sequelize.UUIDV4,
             },
             device_id: {
-                type: Sequelize.STRING,
+                type: Sequelize.UUID,
+                primaryKey: true,
+                allowNull: false,
+                defaultValue: Sequelize.UUIDV4,
             },
             ph: {
                 type: Sequelize.INTEGER,
