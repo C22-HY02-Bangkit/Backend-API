@@ -3,7 +3,7 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class sensor_data extends Model {
         static associate(models) {
-            device.belongsTo(models.device, {
+            sensor_data.belongsTo(models.device, {
                 foreignKey: 'device_id',
                 as: 'device',
             });

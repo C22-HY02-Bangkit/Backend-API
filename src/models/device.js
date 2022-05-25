@@ -2,20 +2,20 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class device extends Model {
+    class Device extends Model {
         static associate(models) {
-            device.belongsTo(models.user, {
+            Device.belongsTo(models.user, {
                 foreignKey: 'user_id',
                 as: 'user',
             });
 
-            device.hasMany(models.sensor_data, {
+            Device.hasMany(models.sensor_data, {
                 foreignKey: 'device_id',
                 as: 'sensor_datas',
             });
         }
     }
-    device.init(
+    Device.init(
         {
             user_id: DataTypes.STRING,
             name: DataTypes.STRING,
@@ -26,5 +26,5 @@ module.exports = (sequelize, DataTypes) => {
             modelName: 'device',
         }
     );
-    return device;
+    return Device;
 };
