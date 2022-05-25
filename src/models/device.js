@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     }
     Device.init(
         {
-            user_id: DataTypes.STRING,
+            user_id: DataTypes.UUID,
             name: DataTypes.STRING,
             code: DataTypes.STRING,
         },

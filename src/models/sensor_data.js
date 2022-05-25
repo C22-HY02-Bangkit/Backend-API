@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     }
     sensor_data.init(
         {
-            device_id: DataTypes.STRING,
+            device_id: DataTypes.UUID,
             ph: DataTypes.INTEGER,
             tds: DataTypes.INTEGER,
             ec: DataTypes.INTEGER,
