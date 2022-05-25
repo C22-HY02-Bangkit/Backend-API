@@ -7,7 +7,9 @@ const { errorMsgTrans } = require('../utils/transform');
 const { v4: uuidv4 } = require('uuid');
 const { generateToken } = require('../utils/tokenManager');
 const { checkBodyPayload } = require('../utils/validator');
+const crypto = require('crypto');
 const AppError = require('../utils/AppError');
+const Email = require('../utils/email/Email');
 
 // note: cuman untuk contoh - akan dihapus dikemudian hari
 exports.me = async (req, res) => {
@@ -27,7 +29,7 @@ exports.me = async (req, res) => {
     res.json({
         code: 200,
         status: 'success',
-        data: devices,
+        data: users,
     });
 };
 
@@ -51,13 +53,31 @@ exports.register = async (req, res) => {
     // hash password
     const password = hashSync(bodyData.password, genSaltSync(10));
 
+    // generate random string
+    const token = crypto.randomBytes(32).toString('hex');
+
     // create new user
     const newUser = await User.create({
         id: uuidv4(),
         fullname: bodyData.fullname,
         email: bodyData.email,
         password: password,
+        verify_user: false,
+        email_verify_token: hashSync(token, genSaltSync(10)),
+        email_verify_expires: Date.now() + 10 * 60 * 100,
     });
+
+    if (!newUser) throw new AppError('Register failed!', 400);
+
+    const link = `http://localhost:3000/verify-email?token=${token}&userid=${newUser.id}`;
+
+    // send email for verify user
+    await new Email(
+        newUser.email,
+        'Greenponic - Verify your account now!',
+        { name: newUser.fullname, link },
+        'verifyemail'
+    ).sendEmail();
 
     res.json({
         code: 200,
@@ -91,16 +111,11 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ where: { email: bodyData.email } });
 
     // if user not exists
-    if (!user) throw new AppError('Email not found!', 404);
+    if (!user) throw new AppError('Invalid credentials!', 400);
 
     // compare password
     const passwordMatch = compareSync(bodyData.password, user.password);
-    if (!passwordMatch) {
-        res.status(401).json({
-            code: 401,
-            message: 'Invalid Password!',
-        });
-    }
+    if (!passwordMatch) throw new AppError('Invalid credentials!', 400);
 
     res.json({
         code: 200,
@@ -133,14 +148,16 @@ exports.forgotPassword = async (req, res) => {
     if (!user) throw new AppError('Email not found!', 404);
 
     //convert token to hexastring
-    const convertToken = generateToken(user.id).toString('hex');
-    
+    const convertToken = crypto.randomBytes(32).toString('hex');
+
     //set token expiring
-    user.email_verify_token = convertToken;
-    user.email_verify_expires = Date.now() + 180000;
+    user.email_verify_token = hashSync(convertToken, genSaltSync(10));
+    user.email_verify_expires = Date.now() + 10 * 60 * 1000;
 
     // save generated token
     const save_token = await user.save();
+
+    const link = `http://localhost:3000/resetpassword?token=${convertToken}&id=${user.id}`;
 
     if (!save_token) {
         res.status(500).json({
@@ -149,13 +166,17 @@ exports.forgotPassword = async (req, res) => {
         });
     }
 
+    // send email for reset password
+    await new Email(
+        user.email,
+        'Reset your Greenponic password',
+        { name: user.name, link },
+        'forgotpassword'
+    ).sendEmail();
+
     res.json({
         code: 200,
         status: 'success',
-        message: 'Token sent successfully!',
-        data: {
-            email_verify_token: save_token.email_verify_token,
-            email_verify_expires: save_token.email_verify_expires,
-        },
+        message: 'Email sent successfully!',
     });
 };

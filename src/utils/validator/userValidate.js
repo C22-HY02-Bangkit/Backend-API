@@ -1,4 +1,5 @@
 const { check } = require('express-validator');
+const User = require('../../models').user;
 
 const registerValidate = [
     check('fullname').notEmpty().withMessage('fullname is required'),
