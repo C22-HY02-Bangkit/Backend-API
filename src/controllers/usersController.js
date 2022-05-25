@@ -1,5 +1,7 @@
-const { genSaltSync, hashSync, compareSync } = require('bcryptjs');
 const User = require('../models').user;
+const Device = require('../models').device;
+const SensorData = require('../models').sensor_data;
+const { genSaltSync, hashSync, compareSync } = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const { v4: uuidv4 } = require('uuid');
@@ -9,11 +11,23 @@ const AppError = require('../utils/AppError');
 
 // note: cuman untuk contoh - akan dihapus dikemudian hari
 exports.me = async (req, res) => {
-    const users = await User.findAll();
+    /**
+     * contoh untuk ambil data dengan relasinya
+     */
+    const users = await User.findAll({
+        include: ['devices'],
+    });
+    const devices = await Device.findAll({
+        include: ['user', 'sensor_datas'],
+    });
+    const sensor_data = await SensorData.findAll({
+        include: ['device'],
+    });
 
     res.json({
         code: 200,
         status: 'success',
+        data: devices,
     });
 };
 
