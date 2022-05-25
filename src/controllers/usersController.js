@@ -134,7 +134,7 @@ exports.forgotPassword = async (req, res) => {
 
     //convert token to hexastring
     const convertToken = generateToken(user.id).toString('hex');
-
+    
     //set token expiring
     user.email_verify_token = convertToken;
     user.email_verify_expires = Date.now() + 180000;

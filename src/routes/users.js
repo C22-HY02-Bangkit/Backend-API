@@ -10,16 +10,16 @@ const {
 const {
     registerValidate,
     loginValidate,
-    resendEmail,
     verifyEmailValidate,
     forgotPasswordValidate,
     resetPasswordValidate,
+    resendEmailValidate,
 } = require('../utils/validator/userValidate');
 
 router.get('/me', me);
 router.post('/login', loginValidate, login);
 router.post('/register', registerValidate, register);
-router.post('/resend-email', resendEmail);
+router.post('/resend-email', resendEmailValidate);
 router.post('/verify-email/:token', verifyEmailValidate);
 router.post('/forgot-password', forgotPasswordValidate, forgotPassword);
 router.post('/reset-password/:token', resetPasswordValidate);
