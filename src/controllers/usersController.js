@@ -3,7 +3,7 @@ const User = require('../models').user;
 const { validationResult } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const { v4: uuidv4 } = require('uuid');
-const { generateToken, verifyToken } = require('../utils/tokenManager');
+const { generateToken } = require('../utils/tokenManager');
 const { checkBodyPayload } = require('../utils/validator');
 const AppError = require('../utils/AppError');
 
@@ -117,14 +117,6 @@ exports.forgotPassword = async (req, res) => {
 
     //if the user email does not exist
     if (!user) throw new AppError('Email not found!', 404);
-
-    //check error
-    if (!generateToken) {
-        res.status(500).json({
-            code: 500,
-            message: 'An error occured. Please try again later.',
-        });
-    }
 
     //convert token to hexastring
     const convertToken = generateToken(user.id).toString('hex');
