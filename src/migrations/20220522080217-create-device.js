@@ -1,5 +1,4 @@
 'use strict';
-const { v4 } = require('uuid');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -8,16 +7,20 @@ module.exports = {
                 type: Sequelize.UUID,
                 primaryKey: true,
                 allowNull: false,
-                defaultValue: v4(),
+                defaultValue: Sequelize.UUIDV4,
             },
             user_id: {
-                type: Sequelize.STRING,
+                type: Sequelize.UUID,
+                primaryKey: true,
+                allowNull: false,
+                defaultValue: Sequelize.UUIDV4,
             },
             name: {
                 type: Sequelize.STRING,
             },
             code: {
                 type: Sequelize.STRING,
+                unique: true,
             },
             createdAt: {
                 allowNull: false,
