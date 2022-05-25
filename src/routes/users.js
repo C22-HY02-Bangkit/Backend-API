@@ -5,7 +5,7 @@ const {
     login,
     register,
     me,
-    forgotPassword,
+    forgot_password,
 } = require('../controllers/usersController');
 const User = require('../models').user;
 
@@ -33,6 +33,6 @@ const loginValidate = [
 router.get('/me', me);
 router.post('/login', loginValidate, login);
 router.post('/register', registerValidate, register);
-router.post('/forgotPassword', forgotPassword);
+router.post('/forgotPassword', forgot_password);
 
 module.exports = router;
