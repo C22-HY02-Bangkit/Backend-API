@@ -125,6 +125,56 @@ exports.login = async (req, res) => {
     });
 };
 
+exports.resendEmail = async (req, res) => {
+    const bodyData = req.body;
+
+    // check body payload
+    checkBodyPayload(bodyData, ['email']);
+
+    // validate body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(403).json({
+            code: 403,
+            message: 'Invalid input!',
+            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
+        });
+        return;
+    }
+
+    const user = await User.findOne({ where: { email: bodyData.email } });
+
+    if (!user) throw new AppError('Email not found!', 404);
+
+    if (user.verify_user) throw new AppError('Email is verified!', 400);
+
+    // generate random string
+    const token = crypto.randomBytes(32).toString('hex');
+
+    // update user data
+    user.email_verify_token = hashSync(token, genSaltSync(10));
+    user.email_verify_expires = Date.now() + 10 * 60 * 100;
+
+    // save user
+    await user.save();
+
+    const link = `http://localhost:3000/verify-email?token=${token}&userid=${user.id}`;
+
+    // send email for verify user
+    await new Email(
+        user.email,
+        'Greenponic - Verify your account now!',
+        { name: user.fullname, link },
+        'verifyemail'
+    ).sendEmail();
+
+    res.json({
+        code: 200,
+        status: 'success',
+        message: 'Email sent',
+    });
+};
+
 exports.forgotPassword = async (req, res) => {
     const bodyData = req.body;
 
