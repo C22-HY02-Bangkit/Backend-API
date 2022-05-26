@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             email_verify_expires: DataTypes.DATE,
             password_change_at: DataTypes.DATE,
             password_reset_token: DataTypes.STRING,
-            password_reset_expires: DataTypes.STRING,
+            password_reset_expires: DataTypes.DATE,
         },
         {
             sequelize,
