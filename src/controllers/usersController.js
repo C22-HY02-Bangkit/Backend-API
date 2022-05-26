@@ -12,25 +12,11 @@ const AppError = require('../utils/AppError');
 const Email = require('../utils/email/Email');
 const { Op } = require('sequelize');
 
-// note: cuman untuk contoh - akan dihapus dikemudian hari
 exports.me = async (req, res) => {
-    /**
-     * contoh untuk ambil data dengan relasinya
-     */
-    const users = await User.findAll({
-        where: { email: 'alfi@mail.com' },
-    });
-    const devices = await Device.findAll({
-        include: ['user', 'sensor_datas'],
-    });
-    const sensor_data = await SensorData.findAll({
-        include: ['device'],
-    });
-
     res.json({
         code: 200,
         status: 'success',
-        data: users,
+        data: req.user,
     });
 };
 

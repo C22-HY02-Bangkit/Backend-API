@@ -1,4 +1,5 @@
 const express = require('express');
+const { protect } = require('../middlewares');
 
 const router = express.Router();
 const {
@@ -19,7 +20,7 @@ const {
     resendEmailValidate,
 } = require('../utils/validator/userValidate');
 
-router.get('/me', me);
+router.get('/me', protect, me);
 router.post('/login', loginValidate, login);
 router.post('/register', registerValidate, register);
 router.post('/resend-email', resendEmailValidate, resendEmail);
