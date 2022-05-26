@@ -246,12 +246,11 @@ exports.forgotPassword = async (req, res) => {
     //convert token to hexastring
     const convertToken = crypto.randomBytes(32).toString('hex');
 
-    //set token expiring
-    user.email_verify_token = hashSync(convertToken, genSaltSync(10));
-    user.email_verify_expires = Date.now() + 60 * 60 * 24 * 1000;
-
     // save generated token
-    const save_token = await user.save();
+    const save_token = await user.update({
+        password_reset_token: hashSync(convertToken, genSaltSync(10)),
+        password_reset_expires: Date.now() + 60 * 60 * 24 * 1000,
+    });
 
     const link = `http://localhost:3000/resetpassword?token=${convertToken}&id=${user.id}`;
 
@@ -274,5 +273,51 @@ exports.forgotPassword = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Email sent successfully!',
+    });
+};
+
+exports.resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const bodyData = req.body;
+
+    // check body payload
+    checkBodyPayload(bodyData, ['user_id', 'password']);
+
+    // validate body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(403).json({
+            code: 403,
+            message: 'Invalid input!',
+            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
+        });
+        return;
+    }
+
+    // find user and check if verifyToken has not expires
+    const user = await User.findOne({
+        where: {
+            id: bodyData.user_id,
+            password_reset_expires: { [Op.gt]: Date.now() },
+        },
+    });
+
+    if (!user) throw new AppError('Invalid credentials!', 401);
+
+    // validate token
+    const validateToken = compareSync(token, user.password_reset_token);
+    if (!validateToken) throw new AppError('Invalid credentials!', 401);
+
+    // update user
+    await user.update({
+        password_change_at: Date.now(),
+        password_reset_token: null,
+        password_reset_expires: null,
+    });
+
+    res.json({
+        code: 200,
+        status: 'success',
+        message: 'Reset password successfully!',
     });
 };

@@ -8,6 +8,7 @@ const {
     forgotPassword,
     resendEmail,
     verifyEmail,
+    resetPassword,
 } = require('../controllers/usersController');
 const {
     registerValidate,
@@ -24,6 +25,6 @@ router.post('/register', registerValidate, register);
 router.post('/resend-email', resendEmailValidate, resendEmail);
 router.post('/verify-email/:token', verifyEmailValidate, verifyEmail);
 router.post('/forgot-password', forgotPasswordValidate, forgotPassword);
-router.post('/reset-password/:token', resetPasswordValidate);
+router.post('/reset-password/:token', resetPasswordValidate, resetPassword);
 
 module.exports = router;
