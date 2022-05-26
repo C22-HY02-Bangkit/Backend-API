@@ -1,38 +1,30 @@
 const express = require('express');
-const { check } = require('express-validator');
+
 const router = express.Router();
 const {
     login,
     register,
     me,
     forgotPassword,
+    resendEmail,
+    verifyEmail,
+    resetPassword,
 } = require('../controllers/usersController');
-const User = require('../models').user;
-
-const registerValidate = [
-    check('fullname').notEmpty().withMessage('fullname is required'),
-    check('email')
-        .notEmpty()
-        .withMessage('email is required')
-        .isEmail()
-        .custom((value) => {
-            return User.findOne({ where: { email: value } }).then((data) => {
-                if (data) {
-                    return Promise.reject('email already exists!');
-                }
-            });
-        }),
-    check('password').notEmpty().withMessage('password is required'),
-];
-
-const loginValidate = [
-    check('email').notEmpty().withMessage('email is required').isEmail(),
-    check('password').notEmpty().withMessage('password is required'),
-];
+const {
+    registerValidate,
+    loginValidate,
+    verifyEmailValidate,
+    forgotPasswordValidate,
+    resetPasswordValidate,
+    resendEmailValidate,
+} = require('../utils/validator/userValidate');
 
 router.get('/me', me);
 router.post('/login', loginValidate, login);
 router.post('/register', registerValidate, register);
-router.post('/forgot_password', forgotPassword);
+router.post('/resend-email', resendEmailValidate, resendEmail);
+router.post('/verify-email/:token', verifyEmailValidate, verifyEmail);
+router.post('/forgot-password', forgotPasswordValidate, forgotPassword);
+router.post('/reset-password/:token', resetPasswordValidate, resetPassword);
 
 module.exports = router;
