@@ -25,6 +25,7 @@ exports.getDevices = async (req, res) => {
 exports.getDevice = async (req, res) => {
     const { id } = req.params;
 
+    //get device detail by id
     const deviceDetail = await Device.findByPk(id);
 
     if (!deviceDetail)
@@ -36,7 +37,7 @@ exports.getDevice = async (req, res) => {
 exports.addDevice = async (req, res) => {
     const { id: user_id } = req.user;
     const bodyData = req.body;
-    
+
     // check body payload
     checkBodyPayload(bodyData, ['name', 'code']);
 
@@ -50,6 +51,8 @@ exports.addDevice = async (req, res) => {
         });
         return;
     }
+
+    //add new device
     const newDevice = await Device.create({
         id: uuidv4(),
         user_id: user_id,
@@ -57,6 +60,7 @@ exports.addDevice = async (req, res) => {
         code: bodyData.code,
     });
 
+    //check new device
     if (!newDevice) throw new AppError('Add device failed!', 400);
 
     res.json({
@@ -70,6 +74,63 @@ exports.addDevice = async (req, res) => {
     });
 };
 
-exports.editDevice = async (req, res) => {};
+exports.editDevice = async (req, res) => {
+    const { id } = req.params;
+    const bodyData = req.body;
 
-exports.deleteDevice = async (req, res) => {};
+    // check body payload
+    checkBodyPayload(bodyData, ['name']);
+
+    // validate body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(403).json({
+            code: 403,
+            message: 'Invalid input!',
+            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
+        });
+        return;
+    }
+
+    //find device to update
+    const device = await Device.findByPk(id);
+
+    if (!device) throw new AppError('Device not found!', 401);
+
+    //update device
+    const updateDevice = await device.update({
+        name: bodyData.name,
+    });
+
+    //check device update
+    if (!updateDevice) throw new AppError('Update device failed!', 400);
+
+    res.json({
+        code: 200,
+        status: 'success',
+        message: 'Update device success!',
+    });
+};
+
+exports.deleteDevice = async (req, res) => {
+    const { id } = req.params;
+
+    //find device
+    const device = await Device.findByPk(id);
+
+    if (!device) throw new AppError('Device not found!', 404);
+
+    //delete device
+    const deleteDevice = await device.destroy({
+        where: { id: req.params.id },
+    });
+
+    //check delete process
+    if (!deleteDevice) throw new AppError('Delete device failed!', 400);
+
+    res.json({
+        code: 200,
+        status: 'success',
+        message: 'Delete device success!',
+    });
+};
