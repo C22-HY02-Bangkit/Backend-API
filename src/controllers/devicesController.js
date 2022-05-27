@@ -33,10 +33,11 @@ exports.getDevice = async (req, res) => {
 };
 
 exports.addDevice = async (req, res) => {
+    const { id: user_id } = req.user;
     const bodyData = req.body;
 
     // check body payload
-    checkBodyPayload(bodyData, ['user_id', 'name', 'code']);
+    checkBodyPayload(bodyData, ['name', 'code']);
 
     // validate body
     const errors = validationResult(req);
@@ -50,7 +51,7 @@ exports.addDevice = async (req, res) => {
     }
     const newDevice = await Device.create({
         id: uuidv4(),
-        user_id: bodyData.user_id,
+        user_id: user_id,
         name: bodyData.name,
         code: bodyData.code,
     });
