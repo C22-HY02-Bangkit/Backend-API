@@ -31,7 +31,7 @@ const resetPasswordValidate = [
         .notEmpty()
         .isUUID()
         .withMessage('user_id format must be UUID'),
-    check('password').notEmpty(),
+    check('password').notEmpty().withMessage('password is required'),
 ];
 
 const verifyEmailValidate = [
