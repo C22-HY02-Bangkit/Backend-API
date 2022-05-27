@@ -31,7 +31,7 @@ exports.getDevice = async (req, res) => {
         throw new AppError('The id is not related to any devices', 404);
 
     // check if user has access
-    if (!deviceDetail.user_id === user_id)
+    if (!deviceDetail.user_id !== user_id)
         throw new AppError('Access forbidden!', 403);
 
     res.json({
@@ -53,7 +53,7 @@ exports.addDevice = async (req, res) => {
     if (!errors.isEmpty()) {
         res.status(403).json({
             code: 403,
-            message: 'Content can not be empty!',
+            message: 'Invalid input!',
             errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
         });
         return;
@@ -75,6 +75,7 @@ exports.addDevice = async (req, res) => {
         status: 'success',
         message: 'Device added!',
         data: {
+            id: newDevice.id,
             name: newDevice.name,
             code: newDevice.code,
         },
@@ -101,12 +102,12 @@ exports.editDevice = async (req, res) => {
     }
 
     //find device to update
-    const device = await Device.findAll({ where: { id } });
+    const device = await Device.findOne({ where: { id } });
 
     if (!device) throw new AppError('Device not found!', 401);
 
     // check if user has access
-    if (!device.user_id === user_id)
+    if (device.user_id !== user_id) 
         throw new AppError('Access forbidden!', 403);
 
     //update device
@@ -129,11 +130,11 @@ exports.deleteDevice = async (req, res) => {
     const { id: user_id } = req.user;
 
     //find device
-    const device = await Device.findAll({ where: { id } });
+    const device = await Device.findOne({ where: { id } });
     if (!device) throw new AppError('Device not found!', 404);
 
     // check if user has access
-    if (!deviceDetail.user_id === user_id)
+    if (device.user_id !== user_id)
         throw new AppError('Access forbidden!', 403);
 
     //delete device

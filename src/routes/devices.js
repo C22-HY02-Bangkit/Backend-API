@@ -9,11 +9,15 @@ const {
     editDevice,
     deleteDevice,
 } = require('../controllers/devicesController');
+const {
+    postDataValidate,
+    updateDataValidate,
+} = require('../utils/validator/deviceValidate');
 
 router.get('/', protect, getDevices);
 router.get('/:id', protect, getDevice);
-router.post('/', protect, addDevice);
-router.put('/:id', protect, editDevice);
+router.post('/', protect, postDataValidate, addDevice);
+router.put('/:id', protect, updateDataValidate, editDevice);
 router.delete('/:id', protect, deleteDevice);
 
 module.exports = router;
