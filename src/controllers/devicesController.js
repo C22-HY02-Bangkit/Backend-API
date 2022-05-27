@@ -35,7 +35,8 @@ exports.getDevice = async (req, res) => {
 
 exports.addDevice = async (req, res) => {
     const { id: user_id } = req.user;
-
+    const bodyData = req.body;
+    
     // check body payload
     checkBodyPayload(bodyData, ['name', 'code']);
 
