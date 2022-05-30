@@ -3,6 +3,6 @@ const router = express.Router();
 
 router.use('/users', require('./users'));
 router.use('/sensor', require('./sensorData'));
-router.use('/device', require('./devices'));
+router.use('/devices', require('./devices'));
 
 module.exports = router;

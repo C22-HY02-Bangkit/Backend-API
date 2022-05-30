@@ -1,10 +1,9 @@
 const User = require('../models').user;
 const { genSaltSync, hashSync, compareSync } = require('bcryptjs');
-const { validationResult } = require('express-validator');
+const { validationResult, matchedData } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const { v4: uuidv4 } = require('uuid');
 const { generateToken } = require('../utils/tokenManager');
-const { checkBodyPayload } = require('../utils/validator');
 const crypto = require('crypto');
 const AppError = require('../utils/AppError');
 const Email = require('../utils/email/Email');

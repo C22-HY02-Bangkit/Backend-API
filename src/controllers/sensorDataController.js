@@ -25,7 +25,7 @@ exports.addSensorData = async (req, res) => {
     if (!device) throw new AppError('Device not found!', 404);
 
     // check if device belong to user
-    if (!device.user_id !== user_id) {
+    if (device.user_id !== user_id) {
         throw new AppError('Access Forbidden!', 403);
     }
 

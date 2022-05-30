@@ -1,6 +1,5 @@
 const AppError = require('../utils/AppError');
-const { checkBodyPayload } = require('../utils/validator');
-const { validationResult } = require('express-validator');
+const { validationResult, matchedData } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const Device = require('../models').device;
 const { v4: uuidv4 } = require('uuid');
@@ -31,8 +30,9 @@ exports.getDevice = async (req, res) => {
         throw new AppError('The id is not related to any devices', 404);
 
     // check if user has access
-    if (!deviceDetail.user_id !== user_id)
+    if (deviceDetail.user_id !== user_id){
         throw new AppError('Access forbidden!', 403);
+    }
 
     res.json({
         code: 200,
