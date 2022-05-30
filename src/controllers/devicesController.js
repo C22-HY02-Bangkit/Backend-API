@@ -25,12 +25,12 @@ exports.getDevice = async (req, res) => {
     const { id: user_id } = req.user;
 
     //get device detail by id
-    const deviceDetail = await Device.findAll({ where: { id } });
+    const deviceDetail = await Device.findOne({ where: { id } });
     if (!deviceDetail)
         throw new AppError('The id is not related to any devices', 404);
 
     // check if user has access
-    if (deviceDetail.user_id !== user_id){
+    if (deviceDetail.user_id !== user_id) {
         throw new AppError('Access forbidden!', 403);
     }
 
@@ -112,6 +112,9 @@ exports.editDevice = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Update device success!',
+        data: {
+            id: device.id,
+        },
     });
 };
 
@@ -127,7 +130,7 @@ exports.deleteDevice = async (req, res) => {
     if (device.user_id !== user_id) {
         throw new AppError('Access forbidden!', 403);
     }
-    
+
     //delete device
     const deleteDevice = await device.destroy({
         where: { id: req.params.id },
@@ -140,5 +143,8 @@ exports.deleteDevice = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Delete device success!',
+        data: {
+            id: device.id
+        }
     });
 };
