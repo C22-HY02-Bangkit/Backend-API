@@ -1,7 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
-const { validationResult } = require('express-validator');
+const { validationResult, matchedData } = require('express-validator');
 const AppError = require('../utils/AppError');
-const { checkBodyPayload } = require('../utils/validator');
 const { errorMsgTrans } = require('../utils/transform');
 
 const SensorData = require('../models').sensor_data;
@@ -10,25 +9,25 @@ const Device = require('../models').device;
 exports.addSensorData = async (req, res) => {
     const { device_id } = req.params;
     const { id: user_id } = req.user;
-    const bodyData = req.body;
-
-    // check body payload
-    checkBodyPayload(bodyData, ['ph', 'tds', 'ec']);
 
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(403).json({
-            code: 403,
-            message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
-        });
-        return;
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
     }
 
+    // get body data based on validator
+    const bodyData = matchedData(req, { locations: ['body'] });
+
+    // check if device is exists
+    const device = await Device.findOne({ where: { id: device_id } });
+    if (!device) throw new AppError('Device not found!', 404);
+
     // check if device belong to user
-    const device = await Device.findOne({ where: { id: device_id, user_id } });
-    if (!device) throw new AppError('Forbidden!', 403);
+    if (!device.user_id !== user_id) {
+        throw new AppError('Access Forbidden!', 403);
+    }
 
     // insert data
     const newData = await SensorData.create({
@@ -44,6 +43,6 @@ exports.addSensorData = async (req, res) => {
     res.json({
         code: 200,
         status: 'success',
-        message: 'Data added!',
+        message: 'Sensor data added',
     });
 };
