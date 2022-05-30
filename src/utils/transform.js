@@ -1,8 +1,8 @@
 exports.errorMsgTrans = (errors) => {
-    const msg = {};
+    let msg = '';
 
     for (const error of errors) {
-        msg[error.param] = error.msg;
+        msg = error.msg;
     }
 
     return msg;

@@ -1,6 +1,5 @@
 const AppError = require('../utils/AppError');
-const { checkBodyPayload } = require('../utils/validator');
-const { validationResult } = require('express-validator');
+const { validationResult, matchedData } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const Device = require('../models').device;
 const { v4: uuidv4 } = require('uuid');
@@ -8,16 +7,16 @@ const { v4: uuidv4 } = require('uuid');
 exports.getDevices = async (req, res) => {
     const { id: user_id } = req.user;
 
-    // get device belong to user
-    const device = await Device.findAll({ where: { user_id } });
+    // get all device belong to user
+    const devices = await Device.findAll({ where: { user_id } });
 
-    if (!device) throw new AppError('Device not found!', 404);
+    // check if exists
+    if (!devices) throw new AppError('Device not found!', 404);
 
     res.json({
         code: 200,
         status: 'success',
-        message: 'Success!',
-        data: device,
+        data: devices,
     });
 };
 
@@ -26,13 +25,14 @@ exports.getDevice = async (req, res) => {
     const { id: user_id } = req.user;
 
     //get device detail by id
-    const deviceDetail = await Device.findAll({ where: { id } });
+    const deviceDetail = await Device.findOne({ where: { id } });
     if (!deviceDetail)
         throw new AppError('The id is not related to any devices', 404);
 
     // check if user has access
-    if (!deviceDetail.user_id !== user_id)
+    if (deviceDetail.user_id !== user_id) {
         throw new AppError('Access forbidden!', 403);
+    }
 
     res.json({
         code: 200,
@@ -43,21 +43,16 @@ exports.getDevice = async (req, res) => {
 
 exports.addDevice = async (req, res) => {
     const { id: user_id } = req.user;
-    const bodyData = req.body;
-
-    // check body payload
-    checkBodyPayload(bodyData, ['name', 'code']);
 
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(403).json({
-            code: 403,
-            message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
-        });
-        return;
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
     }
+
+    // get body data based on validator
+    const bodyData = matchedData(req, { locations: ['body'] });
 
     //add new device
     const newDevice = await Device.create({
@@ -85,30 +80,25 @@ exports.addDevice = async (req, res) => {
 exports.editDevice = async (req, res) => {
     const { id } = req.params;
     const { id: user_id } = req.user;
-    const bodyData = req.body;
-
-    // check body payload
-    checkBodyPayload(bodyData, ['name']);
 
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(403).json({
-            code: 403,
-            message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
-        });
-        return;
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
     }
+
+    // get body data based on validator
+    const bodyData = matchedData(req, { locations: ['body'] });
 
     //find device to update
     const device = await Device.findOne({ where: { id } });
-
     if (!device) throw new AppError('Device not found!', 401);
 
     // check if user has access
-    if (device.user_id !== user_id) 
+    if (device.user_id !== user_id) {
         throw new AppError('Access forbidden!', 403);
+    }
 
     //update device
     const updateDevice = await device.update({
@@ -122,6 +112,9 @@ exports.editDevice = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Update device success!',
+        data: {
+            id: device.id,
+        },
     });
 };
 
@@ -134,8 +127,9 @@ exports.deleteDevice = async (req, res) => {
     if (!device) throw new AppError('Device not found!', 404);
 
     // check if user has access
-    if (device.user_id !== user_id)
+    if (device.user_id !== user_id) {
         throw new AppError('Access forbidden!', 403);
+    }
 
     //delete device
     const deleteDevice = await device.destroy({
@@ -149,5 +143,8 @@ exports.deleteDevice = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Delete device success!',
+        data: {
+            id: device.id
+        }
     });
 };

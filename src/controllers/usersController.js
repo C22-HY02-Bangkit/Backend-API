@@ -1,12 +1,9 @@
 const User = require('../models').user;
-const Device = require('../models').device;
-const SensorData = require('../models').sensor_data;
 const { genSaltSync, hashSync, compareSync } = require('bcryptjs');
-const { validationResult } = require('express-validator');
+const { validationResult, matchedData } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const { v4: uuidv4 } = require('uuid');
 const { generateToken } = require('../utils/tokenManager');
-const { checkBodyPayload } = require('../utils/validator');
 const crypto = require('crypto');
 const AppError = require('../utils/AppError');
 const Email = require('../utils/email/Email');
@@ -21,21 +18,15 @@ exports.me = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-    const bodyData = req.body;
-
-    // check body payload
-    checkBodyPayload(bodyData, ['fullname', 'email', 'password']);
-
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(403).json({
-            code: 403,
-            message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
-        });
-        return;
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
     }
+
+    // get body data based on validator
+    const bodyData = matchedData(req, { locations: ['body'] });
 
     // hash password
     const password = hashSync(bodyData.password, genSaltSync(10));
@@ -78,21 +69,15 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-    const bodyData = req.body;
-
-    // check body payload
-    checkBodyPayload(bodyData, ['email', 'password']);
-
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(403).json({
-            code: 403,
-            message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
-        });
-        return;
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
     }
+
+    // get body data based on validator
+    const bodyData = matchedData(req, { locations: ['body'] });
 
     // find user by email
     const user = await User.findOne({ where: { email: bodyData.email } });
@@ -113,26 +98,21 @@ exports.login = async (req, res) => {
 };
 
 exports.resendEmail = async (req, res) => {
-    const bodyData = req.body;
-
-    // check body payload
-    checkBodyPayload(bodyData, ['email']);
-
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(403).json({
-            code: 403,
-            message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
-        });
-        return;
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
     }
 
-    const user = await User.findOne({ where: { email: bodyData.email } });
+    // get body data based on validator
+    const bodyData = matchedData(req, { locations: ['body'] });
 
+    // check if user exists
+    const user = await User.findOne({ where: { email: bodyData.email } });
     if (!user) throw new AppError('Email not found!', 404);
 
+    // check if user account already verified
     if (user.verify_user) throw new AppError('Email is already verified!', 400);
 
     // generate random string
@@ -141,6 +121,7 @@ exports.resendEmail = async (req, res) => {
     // update user data
     user.email_verify_token = hashSync(token, genSaltSync(10));
     user.email_verify_expires = Date.now() + 60 * 60 * 24 * 1000;
+
     // save user
     await user.save();
 
@@ -163,21 +144,16 @@ exports.resendEmail = async (req, res) => {
 
 exports.verifyEmail = async (req, res) => {
     const { token } = req.params;
-    const bodyData = req.body;
-
-    // check body payload
-    checkBodyPayload(bodyData, ['user_id']);
 
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(403).json({
-            code: 403,
-            message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
-        });
-        return;
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
     }
+
+    // get body data based on validator
+    const bodyData = matchedData(req, { locations: ['body'] });
 
     // find user and check if verifyToken has not expires
     const user = await User.findOne({
@@ -208,20 +184,15 @@ exports.verifyEmail = async (req, res) => {
 };
 
 exports.forgotPassword = async (req, res) => {
-    const bodyData = req.body;
-
-    checkBodyPayload(bodyData, ['email']);
-
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(403).json({
-            code: 403,
-            message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
-        });
-        return;
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
     }
+
+    // get body data based on validator
+    const bodyData = matchedData(req, { locations: ['body'] });
 
     //check if the email is already in the database
     const user = await User.findOne({ where: { email: bodyData.email } });
@@ -229,7 +200,7 @@ exports.forgotPassword = async (req, res) => {
     //if the user email does not exist
     if (!user) throw new AppError('Email not found!', 404);
 
-    //convert token to hexastring
+    //generate random string
     const convertToken = crypto.randomBytes(32).toString('hex');
 
     // save generated token
@@ -238,14 +209,14 @@ exports.forgotPassword = async (req, res) => {
         password_reset_expires: Date.now() + 60 * 60 * 24 * 1000,
     });
 
-    const link = `http://localhost:3000/resetpassword?token=${convertToken}&id=${user.id}`;
-
     if (!save_token) {
         res.status(500).json({
             code: 500,
             message: 'An error occured while try to save token',
         });
     }
+
+    const link = `http://localhost:3000/resetpassword?token=${convertToken}&id=${user.id}`;
 
     // send email for reset password
     await new Email(
@@ -264,21 +235,15 @@ exports.forgotPassword = async (req, res) => {
 
 exports.resetPassword = async (req, res) => {
     const { token } = req.params;
-    const bodyData = req.body;
-
-    // check body payload
-    checkBodyPayload(bodyData, ['user_id', 'password']);
-
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.status(403).json({
-            code: 403,
-            message: 'Invalid input!',
-            errors: errorMsgTrans(errors.array({ onlyFirstError: true })),
-        });
-        return;
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
     }
+
+    // get body data based on validator
+    const bodyData = matchedData(req, { locations: ['body'] });
 
     // find user and check if verifyToken has not expires
     const user = await User.findOne({
