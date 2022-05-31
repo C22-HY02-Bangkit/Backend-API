@@ -93,7 +93,12 @@ exports.login = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Login success!',
-        token: generateToken(user.id),
+        data: {
+            token: generateToken(user.id),
+            userid: user.id,
+            fullname: user.fullname,
+            email: user.email,
+        },
     });
 };
 
