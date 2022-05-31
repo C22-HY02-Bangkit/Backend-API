@@ -9,6 +9,7 @@ const xss = require('xss-clean');
 const sql = require('./config/db');
 const ErrorHandler = require('./utils/errorHandler');
 const app = express();
+app.use(cors());
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
     cors: {
@@ -22,7 +23,6 @@ const host = process.env.HOST || 'localhost';
 
 // middleware
 app.use(morgan('dev'));
-app.use(cors());
 app.use(helmet());
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false, limit: '10kb' }));
