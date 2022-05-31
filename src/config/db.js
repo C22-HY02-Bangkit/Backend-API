@@ -6,18 +6,19 @@ const port = process.env.DBPORT;
 const database = process.env.DBNAME;
 const username = process.env.DBUSER;
 const password = process.env.DBPASSWORD;
+const env = process.env.NODE_ENV || 'development';
 
 const sql =
-    process.env.ENV_MODE === 'prod'
-        ? postgres(process.env.DATABASE_URL, {
-              ssl: { rejectUnauthorized: false },
-          })
-        : postgres({
+    env === 'development'
+        ? postgres({
               host,
               port,
               database,
               username,
               password,
+          })
+        : postgres(process.env.DATABASE_URL, {
+              ssl: { rejectUnauthorized: false },
           });
 
 module.exports = sql;
