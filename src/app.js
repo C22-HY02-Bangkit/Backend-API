@@ -15,6 +15,7 @@ const io = require('socket.io')(server, {
         origin: '*',
     },
 });
+const Device = require('./models').device;
 
 const port = process.env.PORT || 5000;
 const host = process.env.HOST || 'localhost';
@@ -32,9 +33,22 @@ app.use('/api', require('./routes'));
 
 // realtime server
 io.on('connection', (socket) => {
-    sql.listen('new_data', (payload) => {
+    sql.listen('new_data', async (payload) => {
         const data = JSON.parse(payload);
-        io.emit('realtime', data.new);
+        const device = await Device.findOne({
+            where: { id: data.new.device_id },
+        });
+
+        const newData = {
+            device,
+            sensor_data: {
+                ph: data.new.ph,
+                tds: data.new.tds,
+                ec: data.new.ec,
+            },
+        };
+
+        socket.emit('realtime', newData);
     });
 });
 
@@ -46,4 +60,4 @@ app.all('*', (req, res) => {
 // error handler
 app.use(ErrorHandler);
 
-app.listen(port, () => console.log(`Server run on http://${host}:${port}/`));
+server.listen(port, () => console.log(`Server run on http://${host}:${port}/`));
