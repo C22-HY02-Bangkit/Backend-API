@@ -22,10 +22,10 @@ const host = process.env.HOST || 'localhost';
 // middleware
 app.use(cors());
 app.use(morgan('dev'));
-// app.use(helmet());
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(xss());
+app.use(xss());
 
 // routes
 app.use('/api', require('./routes'));
