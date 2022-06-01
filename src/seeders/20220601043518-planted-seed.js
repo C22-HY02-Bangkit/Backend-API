@@ -8,7 +8,7 @@ module.exports = {
         const plants = await Plant.findAll();
         const devices = await Device.findAll();
 
-        return queryInterface.bulkInsert('planted', [
+        return queryInterface.bulkInsert('planteds', [
             {
                 id: uuidv4(),
                 plant_id: plants[0].id,
@@ -23,6 +23,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        return queryInterface.bulkDelete('planted', null, {});
+        return queryInterface.bulkDelete('planteds', null, {});
     },
 };

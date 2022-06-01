@@ -11,6 +11,9 @@ const {
     updateDataValidate,
 } = require('../utils/validator/plantedValidator');
 
+router.get('/', (req, res) => {
+    res.json({ msg: 'ok' });
+});
 router.get('/:id', protect, getPlanted);
 router.post('/', protect, postDataValidate, addPlanted);
 router.put('/:id', protect, updateDataValidate, udpatePlanted);
