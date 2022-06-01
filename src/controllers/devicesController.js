@@ -93,7 +93,7 @@ exports.editDevice = async (req, res) => {
 
     //find device to update
     const device = await Device.findOne({ where: { id } });
-    if (!device) throw new AppError('Device not found!', 401);
+    if (!device) throw new AppError('Device not found!', 404);
 
     // check if user has access
     if (device.user_id !== user_id) {
