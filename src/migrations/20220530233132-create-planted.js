@@ -3,16 +3,22 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('planted', {
             id: {
-                allowNull: false,
-                autoIncrement: true,
+                type: Sequelize.UUID,
                 primaryKey: true,
-                type: Sequelize.INTEGER,
+                allowNull: false,
+                defaultValue: Sequelize.UUIDV4,
             },
             plant_id: {
-                type: Sequelize.STRING,
+                type: Sequelize.UUID,
+                primaryKey: true,
+                allowNull: false,
+                defaultValue: Sequelize.UUIDV4,
             },
             device_id: {
-                type: Sequelize.STRING,
+                type: Sequelize.UUID,
+                primaryKey: true,
+                allowNull: false,
+                defaultValue: Sequelize.UUIDV4,
             },
             ph: {
                 type: Sequelize.INTEGER,
