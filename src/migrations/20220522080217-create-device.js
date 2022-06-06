@@ -29,22 +29,22 @@ module.exports = {
                 unique: true,
             },
             min_ph: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
             },
             max_ph: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
             },
             min_tds: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
             },
             max_tds: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
             },
             min_ec: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
             },
             max_ec: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
             },
             createdAt: {
                 allowNull: false,

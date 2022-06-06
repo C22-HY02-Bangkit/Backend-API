@@ -16,13 +16,13 @@ module.exports = {
                 defaultValue: Sequelize.UUIDV4,
             },
             ph: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
             },
             tds: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
             },
             ec: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
             },
             createdAt: {
                 allowNull: false,

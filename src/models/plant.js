@@ -9,12 +9,12 @@ module.exports = (sequelize, DataTypes) => {
     plant.init(
         {
             name: DataTypes.STRING,
-            min_ph: DataTypes.INTEGER,
-            max_ph: DataTypes.INTEGER,
-            min_tds: DataTypes.INTEGER,
-            max_tds: DataTypes.INTEGER,
-            min_ec: DataTypes.INTEGER,
-            max_ec: DataTypes.INTEGER,
+            min_ph: DataTypes.FLOAT,
+            max_ph: DataTypes.FLOAT,
+            min_tds: DataTypes.FLOAT,
+            max_tds: DataTypes.FLOAT,
+            min_ec: DataTypes.FLOAT,
+            max_ec: DataTypes.FLOAT,
         },
         {
             sequelize,
