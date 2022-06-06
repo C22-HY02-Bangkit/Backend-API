@@ -9,6 +9,6 @@ router.use('/admin', isAdmin, require('./admin'));
 router.use('/users', require('./users'));
 router.use('/sensor', require('./sensorData'));
 router.use('/devices', require('./devices'));
-router.use('/planted', require('./planted'));
+// router.use('/planted', require('./planted'));
 
 module.exports = router;
