@@ -1,6 +1,7 @@
 const AppError = require('../utils/AppError');
 const { verifyToken } = require('../utils/tokenManager');
 const User = require('../models').user;
+const Admin = require('../models').admin;
 
 exports.protect = async (req, res, next) => {
     let token = req.headers.authorization;
@@ -22,4 +23,23 @@ exports.protect = async (req, res, next) => {
     }
 };
 
-exports.isAdmin = async (req, res) => {};
+exports.isAdmin = async (req, res) => {
+    let token = req.headers.authorization;
+
+    if (token && token.startsWith('Bearer')) {
+        token = token.split(' ')[1];
+        const decoded = verifyToken(token);
+
+        const admin = await Admin.findOne({
+            where: { id: decoded.id },
+            attributes: ['id', 'username'],
+        });
+
+        if (!admin) throw new AppError('Invalid token!');
+
+        req.admin = admin;
+        next();
+    } else {
+        throw new AppError('Invalid token', 403);
+    }
+};
