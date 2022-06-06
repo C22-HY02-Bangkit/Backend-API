@@ -16,8 +16,8 @@ const {
 
 router.get('/', protect, getDevices);
 router.get('/:id', protect, getDevice);
-router.post('/', protect, postDataValidate, addDevice);
 router.put('/:id', protect, updateDataValidate, editDevice);
-router.delete('/:id', protect, deleteDevice);
+// router.post('/', protect, postDataValidate, addDevice);
+// router.delete('/:id', protect, deleteDevice);
 
 module.exports = router;

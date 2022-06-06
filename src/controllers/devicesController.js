@@ -8,7 +8,10 @@ exports.getDevices = async (req, res) => {
     const { id: user_id } = req.user;
 
     // get all device belong to user
-    const devices = await Device.findAll({ where: { user_id } });
+    const devices = await Device.findAll({
+        where: { user_id },
+        include: ['planted'],
+    });
 
     // check if exists
     if (!devices) throw new AppError('Device not found!', 404);
@@ -25,7 +28,11 @@ exports.getDevice = async (req, res) => {
     const { id: user_id } = req.user;
 
     //get device detail by id
-    const deviceDetail = await Device.findOne({ where: { id } });
+    const deviceDetail = await Device.findOne({
+        where: { id },
+        include: ['planted'],
+    });
+    
     if (!deviceDetail)
         throw new AppError('The id is not related to any devices', 404);
 
@@ -89,7 +96,10 @@ exports.editDevice = async (req, res) => {
     }
 
     // get body data based on validator
-    const bodyData = matchedData(req, { locations: ['body'] });
+    const bodyData = matchedData(req, {
+        locations: ['body'],
+        includeOptionals: false,
+    });
 
     //find device to update
     const device = await Device.findOne({ where: { id } });
@@ -101,9 +111,7 @@ exports.editDevice = async (req, res) => {
     }
 
     //update device
-    const updateDevice = await device.update({
-        name: bodyData.name,
-    });
+    const updateDevice = await device.update({ ...bodyData });
 
     //check device update
     if (!updateDevice) throw new AppError('Update device failed!', 400);
@@ -144,7 +152,7 @@ exports.deleteDevice = async (req, res) => {
         status: 'success',
         message: 'Delete device success!',
         data: {
-            id: device.id
-        }
+            id: device.id,
+        },
     });
 };
