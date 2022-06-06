@@ -21,3 +21,5 @@ exports.protect = async (req, res, next) => {
         throw new AppError('Invalid token', 403);
     }
 };
+
+exports.isAdmin = async (req, res) => {};
