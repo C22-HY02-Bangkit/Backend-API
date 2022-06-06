@@ -11,13 +11,22 @@ module.exports = {
             name: {
                 type: Sequelize.STRING,
             },
-            ph: {
+            min_ph: {
                 type: Sequelize.INTEGER,
             },
-            tds: {
+            max_ph: {
                 type: Sequelize.INTEGER,
             },
-            ec: {
+            min_tds: {
+                type: Sequelize.INTEGER,
+            },
+            max_tds: {
+                type: Sequelize.INTEGER,
+            },
+            min_ec: {
+                type: Sequelize.INTEGER,
+            },
+            max_ec: {
                 type: Sequelize.INTEGER,
             },
             createdAt: {
