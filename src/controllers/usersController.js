@@ -95,6 +95,7 @@ exports.login = async (req, res) => {
         message: 'Login success!',
         data: {
             token: generateToken(user.id),
+            verify_user: user.verify_user,
             userid: user.id,
             fullname: user.fullname,
             email: user.email,
@@ -149,11 +150,11 @@ exports.resendEmail = async (req, res) => {
 
 exports.verifyEmail = async (req, res) => {
     const { token } = req.params;
-
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        console.log('verify email => ', msg);
         throw new AppError(msg, 400);
     }
 

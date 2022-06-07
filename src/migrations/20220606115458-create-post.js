@@ -1,33 +1,21 @@
 'use strict';
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('planteds', {
+        await queryInterface.createTable('posts', {
             id: {
                 type: Sequelize.UUID,
                 primaryKey: true,
                 allowNull: false,
                 defaultValue: Sequelize.UUIDV4,
             },
-            plant_id: {
+            user_id: {
                 type: Sequelize.UUID,
-                primaryKey: true,
-                allowNull: false,
-                defaultValue: Sequelize.UUIDV4,
             },
-            device_id: {
-                type: Sequelize.UUID,
-                primaryKey: true,
-                allowNull: false,
-                defaultValue: Sequelize.UUIDV4,
+            title: {
+                type: Sequelize.STRING,
             },
-            ph: {
-                type: Sequelize.INTEGER,
-            },
-            tds: {
-                type: Sequelize.INTEGER,
-            },
-            ec: {
-                type: Sequelize.INTEGER,
+            description: {
+                type: Sequelize.STRING,
             },
             createdAt: {
                 allowNull: false,
@@ -40,6 +28,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('planteds');
+        await queryInterface.dropTable('posts');
     },
 };

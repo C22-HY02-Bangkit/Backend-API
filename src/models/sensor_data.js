@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     sensor_data.init(
         {
             device_id: DataTypes.UUID,
-            ph: DataTypes.INTEGER,
-            tds: DataTypes.INTEGER,
-            ec: DataTypes.INTEGER,
+            ph: DataTypes.FLOAT,
+            tds: DataTypes.FLOAT,
+            ec: DataTypes.FLOAT,
         },
         {
             sequelize,

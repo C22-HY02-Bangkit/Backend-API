@@ -1,27 +1,24 @@
 'use strict';
-
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('sensor_data', {
+        await queryInterface.createTable('user_profiles', {
             id: {
                 type: Sequelize.UUID,
                 primaryKey: true,
                 allowNull: false,
                 defaultValue: Sequelize.UUIDV4,
             },
-            device_id: {
+            user_id: {
                 type: Sequelize.UUID,
-                allowNull: false,
-                defaultValue: Sequelize.UUIDV4,
             },
-            ph: {
-                type: Sequelize.FLOAT,
+            location: {
+                type: Sequelize.JSON,
             },
-            tds: {
-                type: Sequelize.FLOAT,
+            province: {
+                type: Sequelize.STRING,
             },
-            ec: {
-                type: Sequelize.FLOAT,
+            address: {
+                type: Sequelize.STRING,
             },
             createdAt: {
                 allowNull: false,
@@ -34,6 +31,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('sensor_data');
+        await queryInterface.dropTable('user_profiles');
     },
 };

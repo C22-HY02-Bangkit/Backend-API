@@ -1,19 +1,18 @@
+const { matchedData, validationResult } = require('express-validator');
 const AppError = require('../utils/AppError');
-const { validationResult, matchedData } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
-const Device = require('../models').device;
 const { v4: uuidv4 } = require('uuid');
+const User = require('../models').user;
+const Admin = require('../models').admin;
+const Device = require('../models').device;
+const Plant = require('../models').plant;
 
 exports.getDevices = async (req, res) => {
-    const { id: user_id } = req.user;
-
-    // get all device belong to user
+    // select all device with owner and plant
     const devices = await Device.findAll({
-        where: { user_id },
-        include: ['planted'],
+        include: ['planted', 'user'],
     });
 
-    // check if exists
     if (!devices) throw new AppError('Devices not found!', 404);
 
     res.json({
@@ -25,31 +24,19 @@ exports.getDevices = async (req, res) => {
 
 exports.getDevice = async (req, res) => {
     const { id } = req.params;
-    const { id: user_id } = req.user;
 
-    //get device detail by id
-    const deviceDetail = await Device.findOne({
-        where: { id },
-    });
+    const device = await Device.findOne({ where: { id } });
 
-    if (!deviceDetail)
-        throw new AppError('The id is not related to any devices', 404);
-
-    // check if user has access
-    if (deviceDetail.user_id !== user_id) {
-        throw new AppError('Access forbidden!', 403);
-    }
+    if (!device) throw new AppError('Device not found!', 404);
 
     res.json({
         code: 200,
         status: 'success',
-        data: deviceDetail,
+        data: device,
     });
 };
 
 exports.addDevice = async (req, res) => {
-    const { id: user_id } = req.user;
-
     // validate body
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -60,10 +47,19 @@ exports.addDevice = async (req, res) => {
     // get body data based on validator
     const bodyData = matchedData(req, { locations: ['body'] });
 
+    // find user
+    const user = await User.findOne({ where: { id: bodyData.user_id } });
+
+    // check if user already registered
+    if (!user) throw new AppError('User is not registered yet!', 404);
+
+    // check if user is verified
+    if (!user.verify_user) throw new AppError('User is not verified yet!', 400);
+
     //add new device
     const newDevice = await Device.create({
         id: uuidv4(),
-        user_id: user_id,
+        user_id: bodyData.user_id,
         name: bodyData.name,
         code: bodyData.code,
     });
@@ -85,7 +81,6 @@ exports.addDevice = async (req, res) => {
 
 exports.editDevice = async (req, res) => {
     const { id } = req.params;
-    const { id: user_id } = req.user;
 
     // validate body
     const errors = validationResult(req);
@@ -104,11 +99,6 @@ exports.editDevice = async (req, res) => {
     const device = await Device.findOne({ where: { id } });
     if (!device) throw new AppError('Device not found!', 404);
 
-    // check if user has access
-    if (device.user_id !== user_id) {
-        throw new AppError('Access forbidden!', 403);
-    }
-
     //update device
     const updateDevice = await device.update({ ...bodyData });
 
@@ -125,25 +115,15 @@ exports.editDevice = async (req, res) => {
     });
 };
 
-exports.deleteDevice = async (req, res) => {
+exports.removeDevice = async (req, res) => {
     const { id } = req.params;
-    const { id: user_id } = req.user;
 
     //find device
     const device = await Device.findOne({ where: { id } });
     if (!device) throw new AppError('Device not found!', 404);
 
-    // check if user has access
-    if (device.user_id !== user_id) {
-        throw new AppError('Access forbidden!', 403);
-    }
-
     //delete device
-    const deleteDevice = await device.destroy({
-        where: { id: req.params.id },
-    });
-
-    //check delete process
+    const deleteDevice = await device.destroy();
     if (!deleteDevice) throw new AppError('Delete device failed!', 400);
 
     res.json({

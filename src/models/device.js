@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'user',
             });
 
+            Device.belongsTo(models.plant, {
+                foreignKey: 'plant_id',
+                as: 'planted',
+            });
+
             Device.hasMany(models.sensor_data, {
                 foreignKey: 'device_id',
                 as: 'sensor_datas',
@@ -18,8 +23,15 @@ module.exports = (sequelize, DataTypes) => {
     Device.init(
         {
             user_id: DataTypes.UUID,
+            plant_id: DataTypes.UUID,
             name: DataTypes.STRING,
             code: DataTypes.STRING,
+            min_ph: DataTypes.FLOAT,
+            max_ph: DataTypes.FLOAT,
+            min_tds: DataTypes.FLOAT,
+            max_tds: DataTypes.FLOAT,
+            min_ec: DataTypes.FLOAT,
+            max_ec: DataTypes.FLOAT,
         },
         {
             sequelize,

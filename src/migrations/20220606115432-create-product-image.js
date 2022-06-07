@@ -1,27 +1,18 @@
 'use strict';
-
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('sensor_data', {
+        await queryInterface.createTable('product_images', {
             id: {
                 type: Sequelize.UUID,
                 primaryKey: true,
                 allowNull: false,
                 defaultValue: Sequelize.UUIDV4,
             },
-            device_id: {
+            product_id: {
                 type: Sequelize.UUID,
-                allowNull: false,
-                defaultValue: Sequelize.UUIDV4,
             },
-            ph: {
-                type: Sequelize.FLOAT,
-            },
-            tds: {
-                type: Sequelize.FLOAT,
-            },
-            ec: {
-                type: Sequelize.FLOAT,
+            url: {
+                type: Sequelize.STRING,
             },
             createdAt: {
                 allowNull: false,
@@ -34,6 +25,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('sensor_data');
+        await queryInterface.dropTable('product_images');
     },
 };
