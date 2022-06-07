@@ -139,9 +139,7 @@ exports.deleteDevice = async (req, res) => {
     }
 
     //delete device
-    const deleteDevice = await device.destroy({
-        where: { id: req.params.id },
-    });
+    const deleteDevice = await device.destroy();
 
     //check delete process
     if (!deleteDevice) throw new AppError('Delete device failed!', 400);
