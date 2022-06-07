@@ -23,7 +23,7 @@ exports.protect = async (req, res, next) => {
     }
 };
 
-exports.isAdmin = async (req, res) => {
+exports.isAdmin = async (req, res, next) => {
     let token = req.headers.authorization;
 
     if (token && token.startsWith('Bearer')) {

@@ -1,11 +1,7 @@
 const { check } = require('express-validator');
 
 const loginValidator = [
-    check('email')
-        .notEmpty()
-        .withMessage('email field is required')
-        .isEmail()
-        .withMessage('email not valid'),
+    check('username').notEmpty().withMessage('username field is required'),
     check('password').notEmpty().withMessage('password field is required'),
 ];
 
@@ -29,18 +25,15 @@ const addDeviceValidator = [
 
 const editDeviceValidator = [
     check('user_id')
-        .notEmpty()
-        .withMessage('user_id field is required')
+        .optional()
         .isUUID()
         .withMessage('user_id should be a valid UUID'),
     check('name')
-        .notEmpty()
-        .withMessage('name field is required')
+        .optional()
         .isString()
         .withMessage('name field must be string'),
     check('code')
-        .notEmpty()
-        .withMessage('code field is required')
+        .optional()
         .isString()
         .withMessage('code field must be string'),
 ];

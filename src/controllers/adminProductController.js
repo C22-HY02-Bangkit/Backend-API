@@ -12,7 +12,7 @@ exports.getProducts = async (req, res) => {
     // get all products
     const products = await Product.findAll();
 
-    if (!products) throw new AppError('Products not found!', 404);
+    if (!products.length) throw new AppError('Products not found!', 404);
 
     res.json({
         code: 200,

@@ -11,14 +11,12 @@ module.exports = {
             },
             user_id: {
                 type: Sequelize.UUID,
-                primaryKey: true,
                 allowNull: false,
                 defaultValue: Sequelize.UUIDV4,
             },
             plant_id: {
                 type: Sequelize.UUID,
-                primaryKey: true,
-                allowNull: false,
+                allowNull: true,
                 defaultValue: Sequelize.UUIDV4,
             },
             name: {

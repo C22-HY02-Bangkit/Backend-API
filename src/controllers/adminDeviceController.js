@@ -54,7 +54,7 @@ exports.addDevice = async (req, res) => {
     if (!user) throw new AppError('User is not registered yet!', 404);
 
     // check if user is verified
-    if (user.verify_user) throw new AppError('User is not verified yet!', 400);
+    if (!user.verify_user) throw new AppError('User is not verified yet!', 400);
 
     //add new device
     const newDevice = await Device.create({
@@ -131,7 +131,7 @@ exports.removeDevice = async (req, res) => {
         status: 'success',
         message: 'Delete device success!',
         data: {
-            id: device,
+            id: device.id,
         },
     });
 };
