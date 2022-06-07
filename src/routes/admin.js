@@ -10,9 +10,18 @@ const {
     removeDevice,
 } = require('../controllers/adminDeviceController');
 const {
+    getProducts,
+    getProduct,
+    addProduct,
+    editProduct,
+    removeProduct,
+} = require('../controllers/adminProductController');
+const {
     loginValidator,
     addDeviceValidator,
     editDeviceValidator,
+    addProductValidator,
+    editProductValidator,
 } = require('../utils/validator/adminValidator');
 
 // auth
@@ -29,6 +38,10 @@ router.put('/devices/:id', editDeviceValidator, editDevice);
 router.delete('/devices/:id', removeDevice);
 
 // product
-router.get('/products');
+router.get('/products', getProducts);
+router.get('/products/:id', getProduct);
+router.post('/products', addProductValidator, addProduct);
+router.put('/products/:id', editProductValidator, editProduct);
+router.delete('/products/:id', removeProduct);
 
 module.exports = router;

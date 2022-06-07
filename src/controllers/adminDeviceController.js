@@ -1,14 +1,15 @@
 const { matchedData, validationResult } = require('express-validator');
 const AppError = require('../utils/AppError');
 const { errorMsgTrans } = require('../utils/transform');
+const { v4: uuidv4 } = require('uuid');
 const User = require('../models').user;
 const Admin = require('../models').admin;
 const Device = require('../models').device;
 const Plant = require('../models').plant;
 
 exports.getDevices = async (req, res) => {
+    // select all device with owner and plant
     const devices = await Device.findAll({
-        where: { user_id },
         include: ['planted', 'user'],
     });
 
@@ -123,7 +124,6 @@ exports.removeDevice = async (req, res) => {
 
     //delete device
     const deleteDevice = await device.destroy();
-
     if (!deleteDevice) throw new AppError('Delete device failed!', 400);
 
     res.json({

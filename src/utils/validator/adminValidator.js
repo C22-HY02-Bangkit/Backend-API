@@ -45,8 +45,40 @@ const editDeviceValidator = [
         .withMessage('code field must be string'),
 ];
 
+const addProductValidator = [
+    check('title')
+        .notEmpty()
+        .withMessage('title field is required')
+        .isString()
+        .withMessage('title field must be string'),
+    check('description')
+        .notEmpty()
+        .withMessage('description field is required')
+        .isString()
+        .withMessage('description field must be string'),
+    check('price')
+        .notEmpty()
+        .withMessage('price field is required')
+        .isInt()
+        .withMessage('price must be a number'),
+];
+
+const editProductValidator = [
+    check('title')
+        .optional()
+        .isString()
+        .withMessage('title field must be string'),
+    check('description')
+        .optional()
+        .isString()
+        .withMessage('description field must be string'),
+    check('price').optional().isInt().withMessage('price must be a number'),
+];
+
 module.exports = {
     loginValidator,
     addDeviceValidator,
     editDeviceValidator,
+    addProductValidator,
+    editProductValidator,
 };
