@@ -11,10 +11,7 @@ module.exports = {
             user_id: {
                 type: Sequelize.UUID,
             },
-            title: {
-                type: Sequelize.STRING,
-            },
-            description: {
+            text: {
                 type: Sequelize.STRING,
             },
             createdAt: {

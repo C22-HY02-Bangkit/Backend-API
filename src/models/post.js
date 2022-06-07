@@ -7,8 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     post.init(
         {
             user_id: DataTypes.UUID,
-            title: DataTypes.STRING,
-            description: DataTypes.STRING,
+            text: DataTypes.STRING,
         },
         {
             sequelize,
