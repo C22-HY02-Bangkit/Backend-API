@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             user_id: DataTypes.UUID,
             location: DataTypes.JSON,
+            phone_number: DataTypes.STRING,
             province: DataTypes.STRING,
             address: DataTypes.STRING,
         },

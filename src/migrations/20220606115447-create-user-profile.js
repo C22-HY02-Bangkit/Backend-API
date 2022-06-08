@@ -14,6 +14,9 @@ module.exports = {
             location: {
                 type: Sequelize.JSON,
             },
+            phone_number: {
+                type: Sequelize.STRING,
+            },
             province: {
                 type: Sequelize.STRING,
             },
