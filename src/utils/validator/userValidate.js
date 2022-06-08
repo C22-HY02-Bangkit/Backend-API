@@ -1,6 +1,25 @@
 const { check } = require('express-validator');
 const User = require('../../models').user;
 
+const EditProfileValidate = [
+    check('location')
+        .optional()
+        .isJSON()
+        .withMessage('location must be a json format'),
+    check('phone_number')
+        .optional()
+        .isString()
+        .withMessage('phone_number must be a string'),
+    check('province')
+        .optional()
+        .isString()
+        .withMessage('province must be a string'),
+    check('address')
+        .optional()
+        .isString()
+        .withMessage('address must be a string'),
+];
+
 const registerValidate = [
     check('fullname').notEmpty().withMessage('fullname field is required'),
     check('email')
@@ -52,4 +71,5 @@ module.exports = {
     resetPasswordValidate,
     verifyEmailValidate,
     resendEmailValidate,
+    EditProfileValidate
 };

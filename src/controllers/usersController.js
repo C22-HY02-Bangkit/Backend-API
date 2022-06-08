@@ -1,4 +1,3 @@
-const User = require('../models').user;
 const { genSaltSync, hashSync, compareSync } = require('bcryptjs');
 const { validationResult, matchedData } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
@@ -8,12 +7,49 @@ const crypto = require('crypto');
 const AppError = require('../utils/AppError');
 const Email = require('../utils/email/Email');
 const { Op } = require('sequelize');
+const User = require('../models').user;
+const User_profile = require('../models').user_profile;
 
 exports.me = async (req, res) => {
+    const { id } = req.user;
+
+    const user = await User.findOne({
+        where: { id },
+        include: ['detail'],
+    });
+
     res.json({
         code: 200,
         status: 'success',
-        data: req.user,
+        data: user,
+    });
+};
+
+exports.editProfile = async (req, res) => {
+    const { id: user_id } = req.user;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
+        throw new AppError(msg, 400);
+    }
+
+    // get body data based on validator
+    const bodyData = matchedData(req, {
+        locations: ['body'],
+        includeOptionals: false,
+    });
+
+    const user_profile = await User_profile.findOne({ where: { user_id } });
+
+    if (!user_profile) throw new AppError('User not found!', 404);
+    console.log('bodyData', bodyData);
+    await user_profile.update({ ...bodyData });
+
+    res.json({
+        code: 200,
+        status: 'success',
+        message: 'User profile updated!',
     });
 };
 
@@ -26,7 +62,9 @@ exports.register = async (req, res) => {
     }
 
     // get body data based on validator
-    const bodyData = matchedData(req, { locations: ['body'] });
+    const bodyData = matchedData(req, {
+        locations: ['body'],
+    });
 
     // hash password
     const password = hashSync(bodyData.password, genSaltSync(10));

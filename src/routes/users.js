@@ -10,6 +10,7 @@ const {
     resendEmail,
     verifyEmail,
     resetPassword,
+    editProfile,
 } = require('../controllers/usersController');
 const {
     registerValidate,
@@ -18,9 +19,11 @@ const {
     forgotPasswordValidate,
     resetPasswordValidate,
     resendEmailValidate,
+    EditProfileValidate,
 } = require('../utils/validator/userValidate');
 
 router.get('/me', protect, me);
+router.put('/me', protect, EditProfileValidate, editProfile);
 router.post('/login', loginValidate, login);
 router.post('/register', registerValidate, register);
 router.post('/resend-email', resendEmailValidate, resendEmail);
