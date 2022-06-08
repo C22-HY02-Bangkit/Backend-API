@@ -21,7 +21,7 @@ exports.getPost = async (req, res) => {
 
     const post = await Post.findOne({ where: { id } });
 
-    if (!post.length) throw new AppError('Product not found!', 404);
+    if (!post) throw new AppError('Post not found!', 404);
 
     res.json({
         code: 200,
@@ -95,9 +95,7 @@ exports.editPost = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Update post success!',
-        data: {
-            id: post.id,
-        },
+        data: post,
     });
 };
 
@@ -121,8 +119,6 @@ exports.deletePost = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Delete post success!',
-        data: {
-            id: post.id,
-        },
+        postid: post.id,
     });
 };
