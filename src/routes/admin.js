@@ -25,7 +25,15 @@ const {
     addPlantValidator,
     editPlantValidator,
 } = require('../utils/validator/adminValidator');
-const { getPlants, getPlant, addp, addPlant, editPlant, removePlant } = require('../controllers/adminPlantController');
+const {
+    getPlants,
+    getPlant,
+    addp,
+    addPlant,
+    editPlant,
+    removePlant,
+} = require('../controllers/adminPlantController');
+const { getUsers, getUser } = require('../controllers/adminUserController');
 
 // auth
 router.post('/auth/login', loginValidator, login);
@@ -53,5 +61,9 @@ router.get('/plants/:id', getPlant);
 router.post('/plants', addPlantValidator, addPlant);
 router.put('/plants/:id', editPlantValidator, editPlant);
 router.delete('/plants/:id', removePlant);
+
+// plant
+router.get('/users', getUsers);
+router.get('/users/:id', getUser);
 
 module.exports = router;
