@@ -7,34 +7,721 @@
 	},
 	"item": [
 		{
-			"name": "Users",
+			"name": "Admin",
 			"item": [
 				{
-					"name": "Register",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"fullname\": \"test aja\",\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"123123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Device",
+					"item": [
+						{
+							"name": "Get device",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/devices",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"devices"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/users/register",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								"register"
-							]
+						{
+							"name": "Get device detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/admin/devices/cc6345f5-b5fc-4124-ad47-59930f91a2cf",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"devices",
+										"cc6345f5-b5fc-4124-ad47-59930f91a2cf"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add device",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "user_id",
+											"value": "baf597f0-4938-45f6-bd56-1f0e09c51df2",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "Device baru ni",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "YTT-200",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/devices",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"devices"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit device",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "user_id",
+											"value": "1ad74efb-628b-4aff-b599-6a8b63007a51",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "name",
+											"value": "test aja",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "code",
+											"value": "okex",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/devices/b9d25872-4c9a-420e-ba84-222042def90e",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"devices",
+										"b9d25872-4c9a-420e-ba84-222042def90e"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete device",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/devices/b9d25872-4c9a-420e-ba84-222042def90e",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"devices",
+										"b9d25872-4c9a-420e-ba84-222042def90e"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "Product",
+					"item": [
+						{
+							"name": "Get products",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/products",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get product detail",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/products/5561f279-02b9-4d7c-b116-49a82b40b53b",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"products",
+										"5561f279-02b9-4d7c-b116-49a82b40b53b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "baru",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "oke",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "12",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/products",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "baru",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "description",
+											"value": "oke",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "price",
+											"value": "121",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/products/5561f279-02b9-4d7c-b116-49a82b40b53b",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"products",
+										"5561f279-02b9-4d7c-b116-49a82b40b53b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/admin/products/5561f279-02b9-4d7c-b116-49a82b40b53b",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"products",
+										"5561f279-02b9-4d7c-b116-49a82b40b53b"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Plants",
+					"item": [
+						{
+							"name": "Get plants",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/plants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"plants"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get plant detail",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/plants/258d6081-7e6a-4fd7-8f62-2be0a7cd9ffa",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"plants",
+										"258d6081-7e6a-4fd7-8f62-2be0a7cd9ffa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add plant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "tomat",
+											"type": "text"
+										},
+										{
+											"key": "min_ph",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "max_ph",
+											"value": "5",
+											"type": "text"
+										},
+										{
+											"key": "min_tds",
+											"value": "9",
+											"type": "text"
+										},
+										{
+											"key": "max_tds",
+											"value": "11",
+											"type": "text"
+										},
+										{
+											"key": "min_ec",
+											"value": "11",
+											"type": "text"
+										},
+										{
+											"key": "max_ec",
+											"value": "14",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/plants",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"plants"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit plant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "name",
+											"value": "tomat",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "min_ph",
+											"value": "3",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "max_ph",
+											"value": "5",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "min_tds",
+											"value": "9",
+											"type": "text"
+										},
+										{
+											"key": "max_tds",
+											"value": "11",
+											"type": "text"
+										},
+										{
+											"key": "min_ec",
+											"value": "11",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "max_ec",
+											"value": "14",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/plants/56334c9a-9f5f-4b53-bbe7-a4a13242466b",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"plants",
+										"56334c9a-9f5f-4b53-bbe7-a4a13242466b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete plant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/admin/plants/56334c9a-9f5f-4b53-bbe7-a4a13242466b",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"plants",
+										"56334c9a-9f5f-4b53-bbe7-a4a13242466b"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Get users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/admin/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get user detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{adminToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/admin/users/48f1e357-3c2a-4c2a-a167-2ac494a38fdd",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"users",
+										"48f1e357-3c2a-4c2a-a167-2ac494a38fdd"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
 				{
 					"name": "Login",
@@ -42,339 +729,656 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"user_a@mail.com\",\r\n    \"password\": \"123123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123123",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/login",
+							"raw": "{{baseUrl}}/admin/auth/login",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"users",
+								"admin",
+								"auth",
 								"login"
 							]
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Resend email",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"test@test.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users/resend-email",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								"resend-email"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Verify email",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": \"3f6c7ded-6cf1-47ca-82be-45a36fbbb8fb\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users/verify-email/{{userToken}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								"verify-email",
-								"{{userToken}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Forgot password",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"test@test.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users/forgot-password",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								"forgot-password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Reset password",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"user_id\": \"3f6c7ded-6cf1-47ca-82be-45a36fbbb8fb\",\r\n\t\"password\": \"123123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/users/reset-password/{{userToken}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"users",
-								"reset-password",
-								"{{userToken}}"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
 		{
-			"name": "Sensor Data",
+			"name": "User",
 			"item": [
 				{
-					"name": "Add sensor data",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userToken}}",
-									"type": "string"
+					"name": "Users",
+					"item": [
+						{
+							"name": "ME",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/users/me",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"me"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"ph\": 12,\r\n\t\"tds\": 44,\r\n\t\"ec\": 13\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Update user profilee",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "phone_number",
+											"value": "123123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/me",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"me"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/sensor/{{device_id}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"sensor",
-								"{{device_id}}"
-							]
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fullname\": \"test aja\",\r\n    \"email\": \"testsxa1a@test.com\",\r\n    \"password\": \"123123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"user_a@mail.com\",\r\n    \"password\": \"123123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Resend email",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"test@test.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/resend-email",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"resend-email"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Verify email",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": \"3f6c7ded-6cf1-47ca-82be-45a36fbbb8fb\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/verify-email/{{userToken}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"verify-email",
+										"{{userToken}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"test@test.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/forgot-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"forgot-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"user_id\": \"3f6c7ded-6cf1-47ca-82be-45a36fbbb8fb\",\r\n\t\"password\": \"123123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/reset-password/{{userToken}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"reset-password",
+										"{{userToken}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Device",
-			"item": [
-				{
-					"name": "Get user devices",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/devices",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"devices"
-							]
-						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Get device detail",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userToken}}",
-									"type": "string"
+					"name": "Sensor Data",
+					"item": [
+						{
+							"name": "Add sensor data",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"ph\": \"110\",\r\n\t\"tds\": \"212\",\r\n\t\"ec\": \"1211\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/sensor/2dc54794-6db0-4c7a-bded-c0c3c82a55a8",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sensor",
+										"2dc54794-6db0-4c7a-bded-c0c3c82a55a8"
+									]
 								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/devices/{{device_id}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"devices",
-								"{{device_id}}"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Add device",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userToken}}",
-									"type": "string"
+					"name": "Device",
+					"item": [
+						{
+							"name": "Get user devices",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/devices",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"devices"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"abc\",\r\n    \"code\": \"avca\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Get device detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/devices/2dc54794-6db0-4c7a-bded-c0c3c82a55a8",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"devices",
+										"2dc54794-6db0-4c7a-bded-c0c3c82a55a8"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/devices",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"devices"
-							]
+						{
+							"name": "Update device",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"abc\",\r\n    \"min_ph\": 12.5\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/devices/cc6345f5-b5fc-4124-ad47-59930f91a2cf",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"devices",
+										"cc6345f5-b5fc-4124-ad47-59930f91a2cf"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Update device",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userToken}}",
-									"type": "string"
+					"name": "Products",
+					"item": [
+						{
+							"name": "Get all products",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/products",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"abc\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "Get product detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/products/1076ac93-381d-4978-848f-b650d3034940",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"products",
+										"1076ac93-381d-4978-848f-b650d3034940"
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/devices/{{device_id}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"devices",
-								"{{device_id}}"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Delete device",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userToken}}",
-									"type": "string"
+					"name": "Posts",
+					"item": [
+						{
+							"name": "Get posts",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/posts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"posts"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/devices/{{device_id}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"devices",
-								"{{device_id}}"
-							]
+						{
+							"name": "Get post detail",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{baseUrl}}/posts/245ebc2b-99d1-4d6e-a014-fde554758009",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"posts",
+										"245ebc2b-99d1-4d6e-a014-fde554758009"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "text",
+											"value": "oke",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/posts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"posts"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "text",
+											"value": "mantap",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/posts/d55e3265-c794-43fc-a9b8-9a4f38956a7f",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"posts",
+										"d55e3265-c794-43fc-a9b8-9a4f38956a7f"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{userToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/posts/245ebc2b-99d1-4d6e-a014-fde554758009",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"posts",
+										"245ebc2b-99d1-4d6e-a014-fde554758009"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		}
@@ -416,8 +1420,8 @@
 			"type": "string"
 		},
 		{
-			"key": "device_id",
-			"value": "",
+			"key": "adminToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQzNTlhNDlkLWQzNmEtNDg0OC05NTNlLWI5NTg5MDkxOTA4MCIsImlhdCI6MTY1NDU2OTI3MiwiZXhwIjoxNjU3MTYxMjcyfQ.nvNjEikfJiFHC-kZISv1kYLhEbsbv3E2NoGNSu8WESA",
 			"type": "string"
 		}
 	]
