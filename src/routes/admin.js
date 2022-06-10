@@ -62,7 +62,7 @@ router.post('/plants', addPlantValidator, addPlant);
 router.put('/plants/:id', editPlantValidator, editPlant);
 router.delete('/plants/:id', removePlant);
 
-// plant
+// user
 router.get('/users', getUsers);
 router.get('/users/:id', getUser);
 
