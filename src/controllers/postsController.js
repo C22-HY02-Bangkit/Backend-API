@@ -3,11 +3,28 @@ const { validationResult, matchedData } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const { v4: uuidv4 } = require('uuid');
 const Post = require('../models').post;
+const User = require('../models').user;
+const UserProfile = require('../models').user_profile;
 
 exports.getPosts = async (req, res) => {
-    const posts = await Post.findAll();
+    const posts = await Post.findAll({
+        include: [
+            {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'fullname', 'email'],
+                include: [
+                    {
+                        model: UserProfile,
+                        as: 'detail',
+                        attributes: ['phone_number', 'province', 'address'],
+                    },
+                ],
+            },
+        ],
+    });
 
-    if (!posts.length) throw new AppError('Products not found!', 404);
+    if (!posts.length) throw new AppError('Posts not found!', 404);
 
     res.json({
         status: 'success',
@@ -19,7 +36,23 @@ exports.getPosts = async (req, res) => {
 exports.getPost = async (req, res) => {
     const { id } = req.params;
 
-    const post = await Post.findOne({ where: { id } });
+    const post = await Post.findOne({
+        where: { id },
+        include: [
+            {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'fullname', 'email'],
+                include: [
+                    {
+                        model: UserProfile,
+                        as: 'detail',
+                        attributes: ['phone_number', 'province', 'address'],
+                    },
+                ],
+            },
+        ],
+    });
 
     if (!post) throw new AppError('Post not found!', 404);
 
