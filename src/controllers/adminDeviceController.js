@@ -3,14 +3,30 @@ const AppError = require('../utils/AppError');
 const { errorMsgTrans } = require('../utils/transform');
 const { v4: uuidv4 } = require('uuid');
 const User = require('../models').user;
-const Admin = require('../models').admin;
 const Device = require('../models').device;
 const Plant = require('../models').plant;
+const UserProfile = require('../models').user_profile;
 
 exports.getDevices = async (req, res) => {
     // select all device with owner and plant
+
     const devices = await Device.findAll({
-        include: ['planted', 'user'],
+        attributes: ['id', 'code', 'name'],
+        include: [
+            { model: Plant, as: 'planted', attributes: ['id', 'name'] },
+            {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'fullname', 'email'],
+                include: [
+                    {
+                        model: UserProfile,
+                        as: 'detail',
+                        attributes: ['phone_number', 'province', 'address'],
+                    },
+                ],
+            },
+        ],
     });
 
     if (!devices) throw new AppError('Devices not found!', 404);
@@ -25,7 +41,25 @@ exports.getDevices = async (req, res) => {
 exports.getDevice = async (req, res) => {
     const { id } = req.params;
 
-    const device = await Device.findOne({ where: { id } });
+    const device = await Device.findOne({
+        where: { id },
+        attributes: ['id', 'code', 'name'],
+        include: [
+            { model: Plant, as: 'planted', attributes: ['id', 'name'] },
+            {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'fullname', 'email'],
+                include: [
+                    {
+                        model: UserProfile,
+                        as: 'detail',
+                        attributes: ['phone_number', 'province', 'address'],
+                    },
+                ],
+            },
+        ],
+    });
 
     if (!device) throw new AppError('Device not found!', 404);
 
@@ -109,9 +143,7 @@ exports.editDevice = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Update device success!',
-        data: {
-            id: device.id,
-        },
+        device_id: device.id,
     });
 };
 
@@ -130,8 +162,6 @@ exports.removeDevice = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Delete device success!',
-        data: {
-            id: device.id,
-        },
+        device_id: device.id,
     });
 };
