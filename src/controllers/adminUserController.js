@@ -16,9 +16,9 @@ exports.getUsers = async (req, res) => {
         fullname: user.fullname,
         email: user.fullname,
         total_device: user.devices.length,
-        phone_number: user.detail.phone_number,
-        province: user.detail.province,
-        address: user.detail.address,
+        phone_number: user.detail?.phone_number,
+        province: user.detail?.province,
+        address: user.detail?.address,
     }));
 
     if (!users.length) throw new AppError('Users not found!', 404);
