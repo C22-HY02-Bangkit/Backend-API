@@ -8,14 +8,21 @@ const AppError = require('../utils/AppError');
 const Email = require('../utils/email/Email');
 const { Op } = require('sequelize');
 const User = require('../models').user;
-const User_profile = require('../models').user_profile;
+const UserProfile = require('../models').user_profile;
 
 exports.me = async (req, res) => {
     const { id } = req.user;
 
     const user = await User.findOne({
         where: { id },
-        include: ['detail'],
+        attributes: ['id', 'fullname', 'email', 'verify_user', 'createdAt'],
+        include: [
+            {
+                model: UserProfile,
+                as: 'detail',
+                attributes: ['phone_number', 'province', 'address'],
+            },
+        ],
     });
 
     res.json({
@@ -40,7 +47,7 @@ exports.editProfile = async (req, res) => {
         includeOptionals: false,
     });
 
-    const user_profile = await User_profile.findOne({ where: { user_id } });
+    const user_profile = await UserProfile.findOne({ where: { user_id } });
 
     if (!user_profile) throw new AppError('User not found!', 404);
     console.log('bodyData', bodyData);
