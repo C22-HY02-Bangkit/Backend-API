@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
         {
             user_id: DataTypes.UUID,
             plant_id: DataTypes.UUID,
-            name: DataTypes.STRING,
-            code: DataTypes.STRING,
+            product_id: DataTypes.UUID,
+            description: DataTypes.STRING,
             min_ph: DataTypes.FLOAT,
             max_ph: DataTypes.FLOAT,
             min_tds: DataTypes.FLOAT,

@@ -19,12 +19,13 @@ module.exports = {
                 allowNull: true,
                 defaultValue: Sequelize.UUIDV4,
             },
-            name: {
-                type: Sequelize.STRING,
+            product_id: {
+                type: Sequelize.UUID,
+                allowNull: false,
+                defaultValue: Sequelize.UUIDV4,
             },
-            code: {
+            description: {
                 type: Sequelize.STRING,
-                unique: true,
             },
             min_ph: {
                 type: Sequelize.FLOAT,
