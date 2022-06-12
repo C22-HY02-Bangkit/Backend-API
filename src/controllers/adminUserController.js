@@ -14,7 +14,7 @@ exports.getUsers = async (req, res) => {
     const data = users.map((user) => ({
         id: user.id,
         fullname: user.fullname,
-        email: user.fullname,
+        email: user.email,
         total_device: user.devices.length,
         phone_number: user.detail?.phone_number,
         province: user.detail?.province,
