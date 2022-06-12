@@ -5,15 +5,17 @@ const { v4: uuidv4 } = require('uuid');
 const User = require('../models').user;
 const Device = require('../models').device;
 const Plant = require('../models').plant;
+const Product = require('../models').product;
 const UserProfile = require('../models').user_profile;
 
 exports.getDevices = async (req, res) => {
     // select all device with owner and plant
 
     const devices = await Device.findAll({
-        attributes: ['id', 'code', 'name'],
+        attributes: ['id', 'description'],
         include: [
             { model: Plant, as: 'planted', attributes: ['id', 'name'] },
+            { model: Product, as: 'product', attributes: ['id', 'title'] },
             {
                 model: User,
                 as: 'user',
@@ -43,9 +45,10 @@ exports.getDevice = async (req, res) => {
 
     const device = await Device.findOne({
         where: { id },
-        attributes: ['id', 'code', 'name'],
+        // attributes: ['id', 'code', 'name'],
         include: [
             { model: Plant, as: 'planted', attributes: ['id', 'name'] },
+            { model: Product, as: 'product', attributes: ['id', 'title'] },
             {
                 model: User,
                 as: 'user',
@@ -93,9 +96,7 @@ exports.addDevice = async (req, res) => {
     //add new device
     const newDevice = await Device.create({
         id: uuidv4(),
-        user_id: bodyData.user_id,
-        name: bodyData.name,
-        code: bodyData.code,
+        ...bodyData,
     });
 
     //check new device
@@ -105,11 +106,7 @@ exports.addDevice = async (req, res) => {
         code: 200,
         status: 'success',
         message: 'Device added!',
-        data: {
-            id: newDevice.id,
-            name: newDevice.name,
-            code: newDevice.code,
-        },
+        data: newDevice,
     });
 };
 
