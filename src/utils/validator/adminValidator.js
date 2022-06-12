@@ -13,9 +13,9 @@ const addDeviceValidator = [
         .withMessage('user_id should be a valid UUID'),
     check('product_id')
         .notEmpty()
-        .withMessage('user_id field is required')
+        .withMessage('product_id field is required')
         .isUUID()
-        .withMessage('user_id should be a valid UUID'),
+        .withMessage('product_id should be a valid UUID'),
 ];
 
 const editDeviceValidator = [
@@ -25,9 +25,9 @@ const editDeviceValidator = [
         .withMessage('user_id should be a valid UUID'),
     check('product_id')
         .notEmpty()
-        .withMessage('user_id field is required')
+        .withMessage('product_id field is required')
         .isUUID()
-        .withMessage('user_id should be a valid UUID'),
+        .withMessage('product_id should be a valid UUID'),
 ];
 
 const addProductValidator = [
