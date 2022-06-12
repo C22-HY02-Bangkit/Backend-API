@@ -5,19 +5,12 @@ const router = express.Router();
 const {
     getDevices,
     getDevice,
-    addDevice,
     editDevice,
-    deleteDevice,
 } = require('../controllers/devicesController');
-const {
-    postDataValidate,
-    updateDataValidate,
-} = require('../utils/validator/deviceValidate');
+const { updateDataValidate } = require('../utils/validator/deviceValidate');
 
 router.get('/', protect, getDevices);
 router.get('/:id', protect, getDevice);
 router.put('/:id', protect, updateDataValidate, editDevice);
-// router.post('/', protect, postDataValidate, addDevice);
-// router.delete('/:id', protect, deleteDevice);
 
 module.exports = router;

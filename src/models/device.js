@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'planted',
             });
 
+            Device.belongsTo(models.product, {
+                foreignKey: 'product_id',
+                as: 'product',
+            });
+
             Device.hasMany(models.sensor_data, {
                 foreignKey: 'device_id',
                 as: 'sensor_datas',

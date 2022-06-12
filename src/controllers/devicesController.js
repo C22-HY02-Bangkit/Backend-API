@@ -3,6 +3,7 @@ const { validationResult, matchedData } = require('express-validator');
 const { errorMsgTrans } = require('../utils/transform');
 const Device = require('../models').device;
 const Plant = require('../models').plant;
+const Product = require('../models').product;
 const { v4: uuidv4 } = require('uuid');
 
 exports.getDevices = async (req, res) => {
@@ -11,8 +12,11 @@ exports.getDevices = async (req, res) => {
     // get all device belong to user
     const devices = await Device.findAll({
         where: { user_id },
-        attributes: ['id', 'code', 'name'],
-        include: [{ model: Plant, as: 'planted', attributes: ['id', 'name'] }],
+        attributes: ['id', 'description'],
+        include: [
+            { model: Plant, as: 'planted', attributes: ['id', 'name'] },
+            { model: Product, as: 'product', attributes: ['id', 'title'] },
+        ],
     });
 
     // check if exists
@@ -32,8 +36,10 @@ exports.getDevice = async (req, res) => {
     //get device detail by id
     const deviceDetail = await Device.findOne({
         where: { id },
-        attributes: ['id', 'code', 'name', 'user_id'],
-        include: [{ model: Plant, as: 'planted', attributes: ['id', 'name'] }],
+        include: [
+            { model: Plant, as: 'planted', attributes: ['id', 'name'] },
+            { model: Product, as: 'product', attributes: ['id', 'title'] },
+        ],
     });
 
     if (!deviceDetail)
