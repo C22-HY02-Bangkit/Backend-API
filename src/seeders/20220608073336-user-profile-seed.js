@@ -13,6 +13,7 @@ module.exports = {
                 updatedAt: new Date(),
             };
         });
+
         return queryInterface.bulkInsert('user_profiles', data);
     },
 

@@ -12,13 +12,6 @@ module.exports = {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
-            {
-                id: uuidv4(),
-                username: 'admin2',
-                password: hashSync('123123', genSaltSync(10)),
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
         ]);
     },
 

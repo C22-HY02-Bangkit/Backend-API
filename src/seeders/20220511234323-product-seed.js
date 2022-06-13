@@ -7,17 +7,12 @@ module.exports = {
             {
                 id: uuidv4(),
                 title: 'Grp-01 Pro',
-                description: 'Dapat memonitoring dengan perangkat anda',
-                price: 5000000,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 id: uuidv4(),
                 title: 'Grp-01 Pro Max',
-                description:
-                    'Dapat memonitoring dan mengontrol dengan perangkat anda',
-                price: 9000000,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
