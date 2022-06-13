@@ -18,7 +18,10 @@ exports.addSensorData = async (req, res) => {
     }
 
     // get body data based on validator
-    const bodyData = matchedData(req, { locations: ['body'] });
+    const bodyData = matchedData(req, {
+        locations: ['body'],
+        includeOptionals: false,
+    });
 
     // check if device is exists
     const device = await Device.findOne({ where: { id: device_id } });
