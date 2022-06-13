@@ -4,18 +4,18 @@ const postDataValidate = [
     check('ph')
         .notEmpty()
         .withMessage('ph field is required')
-        .isInt()
-        .withMessage('ph should be a number'),
+        .isFloat()
+        .withMessage('ph should be a float'),
     check('tds')
         .notEmpty()
         .withMessage('tds field is required')
-        .isInt()
-        .withMessage('tds should be a number'),
+        .isFloat()
+        .withMessage('tds should be a float'),
     check('ec')
         .notEmpty()
         .withMessage('ec field is required')
-        .isInt()
-        .withMessage('ec should be a number'),
+        .isFloat()
+        .withMessage('ec should be a float'),
 ];
 
 module.exports = {
