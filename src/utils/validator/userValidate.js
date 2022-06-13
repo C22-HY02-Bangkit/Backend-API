@@ -10,14 +10,34 @@ const EditProfileValidate = [
         .optional()
         .isString()
         .withMessage('phone_number must be a string'),
-    check('province')
+    check('province_id')
         .optional()
-        .isString()
-        .withMessage('province must be a string'),
+        .isInt()
+        .withMessage('province_id format must be valid integer'),
     check('address')
         .optional()
         .isString()
         .withMessage('address must be a string'),
+    check('instagram_url')
+        .optional()
+        .isString()
+        .withMessage('instagram_url must be a string'),
+    check('twitter_url')
+        .optional()
+        .isString()
+        .withMessage('twitter_url must be a string'),
+    check('facebook_url')
+        .optional()
+        .isString()
+        .withMessage('facebook_url must be a string'),
+    check('location_privacy')
+        .optional()
+        .isBoolean()
+        .withMessage('location_privacy must be a boolean'),
+    check('planted_privacy')
+        .optional()
+        .isBoolean()
+        .withMessage('planted_privacy must be a boolean'),
 ];
 
 const registerValidate = [
@@ -71,5 +91,5 @@ module.exports = {
     resetPasswordValidate,
     verifyEmailValidate,
     resendEmailValidate,
-    EditProfileValidate
+    EditProfileValidate,
 };

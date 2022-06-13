@@ -9,6 +9,92 @@ const Email = require('../utils/email/Email');
 const { Op } = require('sequelize');
 const User = require('../models').user;
 const UserProfile = require('../models').user_profile;
+const Province = require('../models').province;
+
+exports.getUsers = async (req, res) => {
+    const { id } = req.user;
+
+    // get user data
+    const user = await User.findOne({
+        where: { id },
+        attributes: ['id', 'fullname', 'email'],
+        include: [
+            {
+                model: UserProfile,
+                as: 'detail',
+                attributes: ['province_id'],
+            },
+        ],
+    });
+
+    // check if user is exist
+    if (!user) throw new AppError('User not found!', 404);
+
+    // check if user already set a province
+    if (!user.detail.province_id) {
+        throw new AppError('The User has not set a province yet!');
+    }
+
+    // get all users with same province
+    const users = await User.findAll({
+        where: { id: { [Op.not]: id } },
+        attributes: ['id', 'fullname', 'email'],
+        include: {
+            model: UserProfile,
+            as: 'detail',
+            where: {
+                province_id: user.detail.province_id,
+            },
+            include: [
+                {
+                    model: Province,
+                    as: 'province',
+                    attributes: ['name'],
+                },
+            ],
+        },
+    });
+
+    if (!users.length) {
+        throw new AppError('No users with the same province!', 404);
+    }
+
+    res.json({
+        code: 200,
+        status: 'success',
+        data: users,
+    });
+};
+
+exports.getUser = async (req, res) => {
+    const { id } = req.params;
+
+    const user = await User.findOne({
+        where: { id },
+        attributes: ['id', 'fullname', 'email'],
+        include: [
+            {
+                model: UserProfile,
+                as: 'detail',
+                include: [
+                    {
+                        model: Province,
+                        as: 'province',
+                        attributes: ['name'],
+                    },
+                ],
+            },
+        ],
+    });
+
+    if (!user) throw new AppError('User not found!', 404);
+
+    res.json({
+        code: 200,
+        status: 'success',
+        data: user,
+    });
+};
 
 exports.me = async (req, res) => {
     const { id } = req.user;
@@ -20,7 +106,6 @@ exports.me = async (req, res) => {
             {
                 model: UserProfile,
                 as: 'detail',
-                attributes: ['phone_number', 'province', 'address'],
             },
         ],
     });

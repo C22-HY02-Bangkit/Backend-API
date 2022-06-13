@@ -8,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'user_id',
                 as: 'user',
             });
+
+            user_profile.belongsTo(models.province, {
+                foreignKey: 'province_id',
+                as: 'province',
+            });
         }
     }
     user_profile.init(
@@ -15,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
             user_id: DataTypes.UUID,
             location: DataTypes.JSON,
             phone_number: DataTypes.STRING,
-            province: DataTypes.STRING,
+            province_id: DataTypes.INTEGER,
+            location_privacy: DataTypes.BOOLEAN,
+            planted_privacy: DataTypes.BOOLEAN,
             address: DataTypes.STRING,
             instagram_url: DataTypes.STRING,
             twitter_url: DataTypes.STRING,

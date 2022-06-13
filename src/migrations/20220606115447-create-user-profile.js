@@ -13,9 +13,11 @@ module.exports = {
             },
             location_privacy: {
                 type: Sequelize.BOOLEAN,
+                defaultValue: true,
             },
             planted_privacy: {
                 type: Sequelize.BOOLEAN,
+                defaultValue: true,
             },
             location: {
                 type: Sequelize.JSON,
@@ -23,8 +25,8 @@ module.exports = {
             phone_number: {
                 type: Sequelize.STRING,
             },
-            province: {
-                type: Sequelize.STRING,
+            province_id: {
+                type: Sequelize.INTEGER,
             },
             address: {
                 type: Sequelize.STRING,
