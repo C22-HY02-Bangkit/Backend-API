@@ -175,6 +175,14 @@ exports.register = async (req, res) => {
         email_verify_expires: Date.now() + 60 * 60 * 24 * 1000,
     });
 
+    // auto insert user profile
+    await UserProfile.create({
+        id: uuidv4(),
+        user_id: newUser.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    });
+
     if (!newUser) throw new AppError('Register failed!', 400);
 
     const link = `http://localhost:3000/verify-email?token=${token}&userid=${newUser.id}`;
