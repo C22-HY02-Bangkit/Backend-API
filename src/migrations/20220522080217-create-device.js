@@ -24,6 +24,9 @@ module.exports = {
                 allowNull: false,
                 defaultValue: Sequelize.UUIDV4,
             },
+            status: {
+                type: Sequelize.Number,
+            },
             description: {
                 type: Sequelize.STRING,
             },

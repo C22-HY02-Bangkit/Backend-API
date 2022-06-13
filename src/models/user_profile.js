@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
             phone_number: DataTypes.STRING,
             province: DataTypes.STRING,
             address: DataTypes.STRING,
+            instagram_url: DataTypes.STRING,
+            twitter_url: DataTypes.STRING,
+            facebook_url: DataTypes.STRING,
         },
         {
             sequelize,

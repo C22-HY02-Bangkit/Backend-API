@@ -11,6 +11,12 @@ module.exports = {
             user_id: {
                 type: Sequelize.UUID,
             },
+            location_privacy: {
+                type: Sequelize.BOOLEAN,
+            },
+            planted_privacy: {
+                type: Sequelize.BOOLEAN,
+            },
             location: {
                 type: Sequelize.JSON,
             },
@@ -21,6 +27,15 @@ module.exports = {
                 type: Sequelize.STRING,
             },
             address: {
+                type: Sequelize.STRING,
+            },
+            instagram_url: {
+                type: Sequelize.STRING,
+            },
+            twitter_url: {
+                type: Sequelize.STRING,
+            },
+            facebook_url: {
                 type: Sequelize.STRING,
             },
             createdAt: {
