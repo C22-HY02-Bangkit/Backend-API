@@ -9,6 +9,7 @@ module.exports = {
         const users = await User.findAll();
         const plants = await Plant.findAll();
         const products = await Product.findAll();
+        
         return queryInterface.bulkInsert('devices', [
             {
                 id: uuidv4(),

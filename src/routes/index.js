@@ -8,7 +8,9 @@ router.use('/admin', require('./admin'));
 router.use('/users', require('./users'));
 router.use('/sensor', require('./sensorData'));
 router.use('/devices', require('./devices'));
-router.use('/products', require('./products'));
-router.use('/posts', require('./posts'));
+
+// in active route for a while
+// router.use('/products', require('./products'));
+// router.use('/posts', require('./posts'));
 
 module.exports = router;

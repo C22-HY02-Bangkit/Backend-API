@@ -25,7 +25,7 @@ module.exports = {
                 defaultValue: Sequelize.UUIDV4,
             },
             status: {
-                type: Sequelize.Number,
+                type: Sequelize.INTEGER,
             },
             description: {
                 type: Sequelize.STRING,

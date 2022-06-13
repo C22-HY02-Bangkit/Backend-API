@@ -11,6 +11,8 @@ const {
     verifyEmail,
     resetPassword,
     editProfile,
+    getUsers,
+    getUser,
 } = require('../controllers/usersController');
 const {
     registerValidate,
@@ -22,6 +24,8 @@ const {
     EditProfileValidate,
 } = require('../utils/validator/userValidate');
 
+router.get('/', protect, getUsers);
+router.get('/detail/:id', protect, getUser);
 router.get('/me', protect, me);
 router.put('/me', protect, EditProfileValidate, editProfile);
 router.post('/login', loginValidate, login);

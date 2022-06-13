@@ -1,9 +1,15 @@
 const { check } = require('express-validator');
 const Device = require('../../models').device;
 
-
 const updateDataValidate = [
-    check('description').optional().isString().withMessage('name should be a string'),
+    check('description')
+        .optional()
+        .isString()
+        .withMessage('name should be a string'),
+    check('status')
+        .optional()
+        .isInt()
+        .withMessage('integer should be a integer'),
     check('min_ph')
         .optional()
         .isFloat()
