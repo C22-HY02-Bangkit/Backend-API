@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
             user_id: DataTypes.UUID,
             plant_id: DataTypes.UUID,
             product_id: DataTypes.UUID,
-            status: DataTypes.BOOLEAN,
+            status: DataTypes.INTEGER,
             description: DataTypes.STRING,
             min_ph: DataTypes.FLOAT,
             max_ph: DataTypes.FLOAT,
