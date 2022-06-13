@@ -106,6 +106,13 @@ exports.me = async (req, res) => {
             {
                 model: UserProfile,
                 as: 'detail',
+                include: [
+                    {
+                        model: Province,
+                        as: 'province',
+                        attributes: ['name'],
+                    },
+                ],
             },
         ],
     });
