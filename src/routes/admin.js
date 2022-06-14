@@ -20,15 +20,13 @@ const {
     loginValidator,
     addDeviceValidator,
     editDeviceValidator,
-    addProductValidator,
-    editProductValidator,
     addPlantValidator,
     editPlantValidator,
+    productValidator,
 } = require('../utils/validator/adminValidator');
 const {
     getPlants,
     getPlant,
-    addp,
     addPlant,
     editPlant,
     removePlant,
@@ -51,8 +49,8 @@ router.delete('/devices/:id', removeDevice);
 // product
 router.get('/products', getProducts);
 router.get('/products/:id', getProduct);
-router.post('/products', addProductValidator, addProduct);
-router.put('/products/:id', editProductValidator, editProduct);
+router.post('/products', productValidator, addProduct);
+router.put('/products/:id', productValidator, editProduct);
 router.delete('/products/:id', removeProduct);
 
 // plant

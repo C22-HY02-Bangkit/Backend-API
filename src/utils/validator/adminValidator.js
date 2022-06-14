@@ -30,35 +30,14 @@ const editDeviceValidator = [
         .withMessage('product_id should be a valid UUID'),
 ];
 
-const addProductValidator = [
+const productValidator = [
     check('title')
         .notEmpty()
         .withMessage('title field is required')
         .isString()
         .withMessage('title field must be string'),
-    check('description')
-        .notEmpty()
-        .withMessage('description field is required')
-        .isString()
-        .withMessage('description field must be string'),
-    check('price')
-        .notEmpty()
-        .withMessage('price field is required')
-        .isInt()
-        .withMessage('price must be a number'),
 ];
 
-const editProductValidator = [
-    check('title')
-        .optional()
-        .isString()
-        .withMessage('title field must be string'),
-    check('description')
-        .optional()
-        .isString()
-        .withMessage('description field must be string'),
-    check('price').optional().isInt().withMessage('price must be a number'),
-];
 
 const addPlantValidator = [
     check('name')
@@ -129,8 +108,7 @@ module.exports = {
     loginValidator,
     addDeviceValidator,
     editDeviceValidator,
-    addProductValidator,
-    editProductValidator,
+    productValidator,
     addPlantValidator,
     editPlantValidator,
 };

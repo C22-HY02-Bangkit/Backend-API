@@ -3,30 +3,39 @@ const User = require('../models').user;
 const Device = require('../models').device;
 const UserProfile = require('../models').user_profile;
 const Plant = require('../models').plant;
+const Province = require('../models').province;
+const Product = require('../models').product;
 
 exports.getUsers = async (req, res) => {
     // get all users
     const users = await User.findAll({
-        include: ['detail', 'devices'],
+        attributes: ['id', 'fullname', 'email'],
+        include: [
+            'devices',
+            {
+                model: UserProfile,
+                as: 'detail',
+                include: [
+                    {
+                        model: Province,
+                        as: 'province',
+                        attributes: ['name'],
+                    },
+                ],
+            },
+        ],
     });
 
+    console.log('users', users);
+
     // transform response data
-    const data = users.map((user) => ({
-        id: user.id,
-        fullname: user.fullname,
-        email: user.email,
-        total_device: user.devices.length,
-        phone_number: user.detail?.phone_number,
-        province: user.detail?.province,
-        address: user.detail?.address,
-    }));
 
     if (!users.length) throw new AppError('Users not found!', 404);
 
     res.json({
         code: 200,
         status: 'success',
-        data: data,
+        data: users,
     });
 };
 
@@ -41,17 +50,28 @@ exports.getUser = async (req, res) => {
             {
                 model: UserProfile,
                 as: 'detail',
-                attributes: ['phone_number', 'province', 'address'],
+                include: [
+                    {
+                        model: Province,
+                        as: 'province',
+                        attributes: ['name'],
+                    },
+                ],
             },
             {
                 model: Device,
                 as: 'devices',
-                attributes: ['id', 'name'],
+                attributes: ['id'],
                 include: [
                     {
                         model: Plant,
                         as: 'planted',
                         attributes: ['id', 'name'],
+                    },
+                    {
+                        model: Product,
+                        as: 'product',
+                        attributes: ['id', 'title'],
                     },
                 ],
             },
