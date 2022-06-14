@@ -7,12 +7,13 @@ const Device = require('../models').device;
 const Plant = require('../models').plant;
 const Product = require('../models').product;
 const UserProfile = require('../models').user_profile;
+const Province = require('../models').province;
 
 exports.getDevices = async (req, res) => {
     // select all device with owner and plant
 
     const devices = await Device.findAll({
-        attributes: ['id', 'description'],
+        attributes: ['id', 'description', 'createdAt'],
         include: [
             { model: Plant, as: 'planted', attributes: ['id', 'name'] },
             { model: Product, as: 'product', attributes: ['id', 'title'] },
@@ -24,7 +25,6 @@ exports.getDevices = async (req, res) => {
                     {
                         model: UserProfile,
                         as: 'detail',
-                        attributes: ['phone_number', 'province', 'address'],
                     },
                 ],
             },
@@ -45,7 +45,6 @@ exports.getDevice = async (req, res) => {
 
     const device = await Device.findOne({
         where: { id },
-        // attributes: ['id', 'code', 'name'],
         include: [
             { model: Plant, as: 'planted', attributes: ['id', 'name'] },
             { model: Product, as: 'product', attributes: ['id', 'title'] },
@@ -57,7 +56,6 @@ exports.getDevice = async (req, res) => {
                     {
                         model: UserProfile,
                         as: 'detail',
-                        attributes: ['phone_number', 'province', 'address'],
                     },
                 ],
             },
