@@ -142,7 +142,6 @@ exports.editProfile = async (req, res) => {
     const user_profile = await UserProfile.findOne({ where: { user_id } });
 
     if (!user_profile) throw new AppError('User not found!', 404);
-    console.log('bodyData', bodyData);
     await user_profile.update({ ...bodyData });
 
     res.json({
@@ -299,7 +298,6 @@ exports.verifyEmail = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const msg = errorMsgTrans(errors.array({ onlyFirstError: true }));
-        console.log('verify email => ', msg);
         throw new AppError(msg, 400);
     }
 

@@ -26,10 +26,7 @@ exports.getUsers = async (req, res) => {
         ],
     });
 
-    console.log('users', users);
-
     // transform response data
-
     if (!users.length) throw new AppError('Users not found!', 404);
 
     res.json({

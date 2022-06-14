@@ -9,7 +9,6 @@ exports.protect = async (req, res, next) => {
     if (token && token.startsWith('Bearer')) {
         token = token.split(' ')[1];
         const decoded = verifyToken(token);
-        console.log(decoded.id);
         const user = await User.findOne({
             where: { id: decoded.id },
             attributes: ['id', 'fullname', 'email'],
