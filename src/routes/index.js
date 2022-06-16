@@ -22,6 +22,7 @@ router.use('/admin', require('./admin'));
 router.use('/users', require('./users'));
 router.use('/sensor', require('./sensorData'));
 router.use('/devices', require('./devices'));
+router.use('/plants', require('./plants'));
 
 // in active route for a while
 // router.use('/products', require('./products'));
