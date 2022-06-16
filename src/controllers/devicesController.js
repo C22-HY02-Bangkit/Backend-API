@@ -4,7 +4,7 @@ const { errorMsgTrans } = require('../utils/transform');
 const Device = require('../models').device;
 const Plant = require('../models').plant;
 const Product = require('../models').product;
-const { v4: uuidv4 } = require('uuid');
+const SensorData = require('../models').sensor_data;
 
 exports.getDevices = async (req, res) => {
     const { id: user_id } = req.user;
@@ -42,6 +42,11 @@ exports.getDevice = async (req, res) => {
         ],
     });
 
+    const sensorData = await SensorData.findOne({
+        where: { device_id: id },
+        order: [['createdAt', 'DESC']],
+    });
+
     if (!deviceDetail)
         throw new AppError('The id is not related to any devices', 404);
 
@@ -53,7 +58,7 @@ exports.getDevice = async (req, res) => {
     res.json({
         code: 200,
         status: 'success',
-        data: deviceDetail,
+        data: { sensorData, deviceDetail },
     });
 };
 
