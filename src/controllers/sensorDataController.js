@@ -2,9 +2,27 @@ const { v4: uuidv4 } = require('uuid');
 const { validationResult, matchedData } = require('express-validator');
 const AppError = require('../utils/AppError');
 const { errorMsgTrans } = require('../utils/transform');
+const { Op } = require('sequelize');
 
 const SensorData = require('../models').sensor_data;
 const Device = require('../models').device;
+
+exports.getSensorData = async (req, res) => {
+    const { device_id, type } = req.query;
+
+    const data = await SensorData.findOne({
+        attributes: [`${type}`],
+        where: { device_id, [type]: { [Op.not]: null } },
+        order: [['createdAt', 'DESC']],
+    });
+
+    res.json({
+        code: 200,
+        status: 'success',
+        message: 'Sensor data added',
+        data,
+    });
+};
 
 exports.addSensorData = async (req, res) => {
     const { device_id } = req.params;
