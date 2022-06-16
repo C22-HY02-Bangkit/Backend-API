@@ -13,7 +13,7 @@ const updateDataValidate = [
     check('status')
         .optional()
         .isInt()
-        .withMessage('integer should be a integer'),
+        .withMessage('status should be a integer'),
     check('min_ph')
         .optional()
         .isFloat()
