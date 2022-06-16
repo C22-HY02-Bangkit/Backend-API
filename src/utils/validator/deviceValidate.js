@@ -2,10 +2,14 @@ const { check } = require('express-validator');
 const Device = require('../../models').device;
 
 const updateDataValidate = [
+    check('plant_id')
+        .optional()
+        .isUUID()
+        .withMessage('plant_id id  should be a valid UUID'),
     check('description')
         .optional()
         .isString()
-        .withMessage('name should be a string'),
+        .withMessage('description should be a string'),
     check('status')
         .optional()
         .isInt()
