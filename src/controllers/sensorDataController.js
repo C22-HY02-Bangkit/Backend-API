@@ -19,7 +19,6 @@ exports.getSensorData = async (req, res) => {
     res.json({
         code: 200,
         status: 'success',
-        message: 'Sensor data added',
         data,
     });
 };
