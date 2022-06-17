@@ -191,7 +191,7 @@ exports.register = async (req, res) => {
 
     if (!newUser) throw new AppError('Register failed!', 400);
 
-    const link = `http://localhost:3000/verify-email?token=${token}&userid=${newUser.id}`;
+    const link = `${process.env.FRONTEND_URL}/verify-email?token=${token}&userid=${newUser.id}`;
 
     // send email for verify user
     await new Email(
@@ -275,7 +275,7 @@ exports.resendEmail = async (req, res) => {
     // save user
     await user.save();
 
-    const link = `http://localhost:3000/verify-email?token=${token}&userid=${user.id}`;
+    const link = `${process.env.FRONTEND_URL}/verify-email?token=${token}&userid=${user.id}`;
 
     // send email for verify user
     await new Email(
@@ -365,13 +365,13 @@ exports.forgotPassword = async (req, res) => {
         });
     }
 
-    const link = `http://localhost:3000/resetpassword?token=${convertToken}&id=${user.id}`;
+    const link = `${process.env.FRONTEND_URL}/resetpassword?token=${convertToken}&id=${user.id}`;
 
     // send email for reset password
     await new Email(
         user.email,
         'Reset your Greenponic password',
-        { name: user.name, link },
+        { name: user.fullname, link },
         'forgotpassword'
     ).sendEmail();
 
