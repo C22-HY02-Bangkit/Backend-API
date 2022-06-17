@@ -1,12 +1,23 @@
 <html>
     <head>
         <style>
+            h1{
+                text-align: center;
+                font-weight: bold;
+            }
+
+            p{
+                font-size: 15px;
+            }
 
         </style>
     </head>
     <body>
-        <p>Hi {{name}},</p>
+        <h1>Hi {{name}},</h1>
+        <p>Your email registered into our system</p>
         <p>Please verify your email</p>
-        <a href='{{link}}'> Click here for verify your email</a>
+        <p> Please, click the link below to verify your account</p>
+        <a href='{{link}}'> verify your email</a>
+        <p>{{link}}</p>
     </body>
 </html>
